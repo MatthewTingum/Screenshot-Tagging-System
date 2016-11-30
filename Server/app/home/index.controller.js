@@ -23,8 +23,7 @@
             });
 			
 			
-			// Get all submissions
-			
+			// Get all submissions from database for display on page			
 			SubmissionService.GetAll().then(function (submissions) {
 				vm.submissions = submissions;
 			});

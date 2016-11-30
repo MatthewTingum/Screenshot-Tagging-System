@@ -1,4 +1,6 @@
-﻿var config = require('config.json');
+﻿// Matthew Tingum
+
+var config = require('config.json');
 var express = require('express');
 var router = express.Router();
 var submissionService = require('services/submission.service');
@@ -10,7 +12,7 @@ router.get('/submission', submissionGet);
 
 module.exports = router;
 
-// Puts a submission in the database
+// Uses submissionService to post a submission to the database
 function submissionPost(req, res) {
     submissionService.submissionPost(req.body)
         .then(function () {
@@ -21,7 +23,7 @@ function submissionPost(req, res) {
         });
 }
 
-// Gets all submissions from the database
+// Uses submissionService to get all submissions in the database
 function submissionGet(req, res) {
     submissionService.submissionGet()
         .then(function (subs) {

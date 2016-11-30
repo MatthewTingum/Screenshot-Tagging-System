@@ -1,4 +1,6 @@
-﻿var config = require('config.json');
+﻿// Matthew Tingum
+
+var config = require('config.json');
 var _ = require('lodash');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -14,11 +16,12 @@ service.submissionGet = submissionGet;
 
 module.exports = service;
 
-function submissionPost(userParam) {
+// Puts the key-value pairs of body into the database as one cohesive entry
+function submissionPost(body) {
     var deferred = Q.defer();
 
     db.submissions.insert(
-        userParam,
+        body,
         function (err, doc) {
             if (err) deferred.reject(err.name + ': ' + err.message);
 
@@ -29,24 +32,9 @@ function submissionPost(userParam) {
     return deferred.promise;
 }
 
+// Returns all submissions from the database
 function submissionGet() {
     var deferred = Q.defer();
-	
-	//deferred.resolve(db.submissions.find());
-
-	/*
-    db.submissions.findOne(	
-		{ title: "2" },
-		//{},
-		
-        function (err, doc) {
-            if (err) deferred.reject(err.name + ': ' + err.message);
-			
-			console.log(doc);
-
-            deferred.resolve(doc);
-        });
-		*/
 		
 	db.submissions.find({}).toArray( function (err, subs) {
         
@@ -54,7 +42,7 @@ function submissionGet() {
 					
 
 		if (subs) {
-			console.log(subs);
+			//console.log(subs);	// Log returned submissions to console
 			deferred.resolve(subs);
 		} else {
 			// Not found

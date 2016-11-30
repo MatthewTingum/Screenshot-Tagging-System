@@ -1,4 +1,6 @@
-﻿(function () {
+﻿// Matthew Tingum
+
+(function () {
     'use strict';
 
     angular
@@ -12,6 +14,7 @@
 
         return service;
 
+		// returns all submissions in the database (used by index controller)
         function GetAll() {
             return $http.get('/api/submissions/submission').then(handleSuccess, handleError);
         }
