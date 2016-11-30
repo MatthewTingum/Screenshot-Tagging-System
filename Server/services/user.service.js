@@ -15,6 +15,8 @@ service.create = create;
 service.update = update;
 service.delete = _delete;
 
+service.submissionPost = submissionPost;
+
 module.exports = service;
 
 function authenticate(username, password) {
@@ -151,6 +153,26 @@ function _delete(_id) {
 
             deferred.resolve();
         });
+
+    return deferred.promise;
+}
+
+
+function submissionPost(userParam) {
+    var deferred = Q.defer();
+
+	
+    // set user object to userParam without the cleartext password
+    //var user = _.omit(userParam, 'password');
+
+    db.users.insert(
+        userParam,
+        function (err, doc) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+
+            deferred.resolve();
+        });
+
 
     return deferred.promise;
 }

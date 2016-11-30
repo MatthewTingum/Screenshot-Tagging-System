@@ -6,7 +6,7 @@
         .config(config)
         .run(run);
 
-    function config($stateProvider, $urlRouterProvider) {
+    function config($stateProvider, $urlRouterProvider, $compileProvider) {
         // default route
         $urlRouterProvider.otherwise("/");
 
@@ -25,6 +25,9 @@
                 controllerAs: 'vm',
                 data: { activeTab: 'account' }
             });
+			
+			$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob|local|c):|data:image\//);
+			//$compileProvider.imgSrcSanitizationWhitelist(.*);
     }
 
     function run($http, $rootScope, $window) {

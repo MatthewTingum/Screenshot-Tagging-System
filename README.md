@@ -1,1 +1,1 @@
-# Screenshot-Tagging-System
+# Screenshot Tagging System
