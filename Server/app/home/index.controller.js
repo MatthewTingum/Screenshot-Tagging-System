@@ -11,6 +11,7 @@
         var vm = this;
 
         vm.user = null;
+		vm.loadedSub = loadSub;
 		vm.loadSub = loadSub;
 		
 		// Page is either showing results, or showing one particular submission
@@ -38,22 +39,25 @@
         }
 		
 		
+		// Hides all search results and shows just the one result clicked on by user
 		function loadSub(id) {
 			
-			vm.test = id;
+			vm.curSub = id;
+			vm.showResults = !vm.showResults;
 			
-		/*	
-			UserService.LoadSub(vm.test)
+			SubmissionService.LoadSub(vm.curSub)
                 .then(function (loadedSub) {
 					vm.loadedSub = loadedSub;
                     //FlashService.Success('Submission Loaded');
+					//console.log("It worked fam");
                 })
                 .catch(function (error) {
                     FlashService.Error(error);
+					//console.log(":(");
                 });
-		*/
+		
 			
-			vm.showResults = !vm.showResults;
+			
 			
 			//vm.getSubmissions = UserService.GetSubmissions(user);
 			

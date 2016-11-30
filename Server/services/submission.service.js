@@ -15,6 +15,7 @@ var service = {};
 
 service.submissionPost = submissionPost;
 service.submissionGet = submissionGet;
+service.loadSub = loadSub;
 
 module.exports = service;
 
@@ -52,6 +53,30 @@ function submissionGet() {
 		}
 	});
 	
+
+    return deferred.promise;
+}
+
+// Returns just one submission based on ID from database
+function loadSub(_id) {
+    var deferred = Q.defer();
+	
+	//console.log('shamalammadingdong');
+	//console.log(_id);
+	//console.log('shamalammadingdong');
+
+    db.submissions.findById(_id, function (err, sub) {
+        if (err) deferred.reject(err);
+ 
+        if (sub) {
+            // submission found and returned
+			//console.log(sub);
+            deferred.resolve(sub);
+        } else {
+            // didn't find that sub for some reason
+            deferred.resolve();
+        }
+    });
 
     return deferred.promise;
 }

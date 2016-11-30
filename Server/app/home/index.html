@@ -1,4 +1,7 @@
-﻿<center><h1>Hi {{vm.user.firstName}}!</h1></center>
+﻿<!--Matthew Tingum-->
+<!--TODO: Fancify the submission currntly being shown when !vm.showResults -->
+
+<!--<center><h1>Hi {{vm.user.firstName}}!</h1></center>-->
 
 <div ng-repeat="x in vm.submissions" style="display:table;border-left: thick solid #000000;border-right: thick solid #000000;border-top: thick solid #000000;border-bottom: thick solid #000000;width:100%;" ng-click="vm.loadSub(x._id)" ng-show="vm.showResults">
 <p>
@@ -20,8 +23,22 @@
 
 <div ng-show="!vm.showResults">
 
-Woah dude it worked!
+<center>
+<h2>{{vm.loadedSub.Description}}</h2>
+<br>
+<img ng-src="{{vm.loadedSub.ImagePath}}" style="width:800px;height:450px;" /> 
+<br>
+<br>
+<b>Tags: </b>{{vm.loadedSub.Tags}}
+<br>
+<b>Time: </b>{{vm.loadedSub.Time}}
+<br>
+<b>Character: </b>{{vm.loadedSub.Character}}
+<br>
+<b>Location: </b>{{vm.loadedSub.Location}}
+</center>
 
-<a id="" href="" ng-click="vm.yolo = !vm.yolo">Back</a>
+
+<a id="" href="" ng-click="vm.showResults = !vm.showResults">Back</a>
 
 </div>
