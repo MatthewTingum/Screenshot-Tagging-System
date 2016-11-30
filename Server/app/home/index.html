@@ -1,6 +1,6 @@
 ﻿<center><h1>Hi {{vm.user.firstName}}!</h1></center>
 
-<div ng-repeat="x in vm.submissions" style="display:table;border-left: thick solid #000000;border-right: thick solid #000000;border-top: thick solid #000000;border-bottom: thick solid #000000;width:100%;">
+<div ng-repeat="x in vm.submissions" style="display:table;border-left: thick solid #000000;border-right: thick solid #000000;border-top: thick solid #000000;border-bottom: thick solid #000000;width:100%;" ng-click="vm.loadSub(x._id)" ng-show="vm.showResults">
 <p>
 <span style="vertical-align:middle;display:table-cell;"><img ng-src="{{x.ImagePath}}" alt={{x.Description}} style="width:304px;height:228px;vertical-align:middle;display:table-cell;"/></span>
 <span style="vertical-align:middle;display:table-cell;">
@@ -14,4 +14,14 @@
 	{{x.Time}}
 </span>
 </p>
+</div>
+
+
+
+<div ng-show="!vm.showResults">
+
+Woah dude it worked!
+
+<a id="" href="" ng-click="vm.yolo = !vm.yolo">Back</a>
+
 </div>

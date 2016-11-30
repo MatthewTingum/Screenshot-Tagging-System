@@ -11,6 +11,10 @@
         var vm = this;
 
         vm.user = null;
+		vm.loadSub = loadSub;
+		
+		// Page is either showing results, or showing one particular submission
+		vm.showResults = true;
 		
 		// All submissions to be displayed
 		vm.submissions = null;
@@ -32,6 +36,28 @@
 			
 			
         }
+		
+		
+		function loadSub(id) {
+			
+			vm.test = id;
+			
+		/*	
+			UserService.LoadSub(vm.test)
+                .then(function (loadedSub) {
+					vm.loadedSub = loadedSub;
+                    //FlashService.Success('Submission Loaded');
+                })
+                .catch(function (error) {
+                    FlashService.Error(error);
+                });
+		*/
+			
+			vm.showResults = !vm.showResults;
+			
+			//vm.getSubmissions = UserService.GetSubmissions(user);
+			
+		}
     }
 
 })();
