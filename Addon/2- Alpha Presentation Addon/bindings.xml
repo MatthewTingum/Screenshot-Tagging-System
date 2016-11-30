@@ -1,0 +1,10 @@
+<Bindings>
+  <Binding name="Screenshot Hotkey" header="SStagger" category="ADDONS" runOnUp="true">
+	if SavedVar.initialized == 0 then
+		firsttime()
+	end
+    if keystate == "down" then
+		runtime()
+	end
+  </Binding>
+</Bindings>

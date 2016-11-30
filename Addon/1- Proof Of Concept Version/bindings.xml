@@ -1,0 +1,5 @@
+<Bindings>
+  <Binding name="Screenshot Hotkey" header="hello" category="ADDONS" runOnUp="true">
+    MSGPrint();
+  </Binding>
+</Bindings>

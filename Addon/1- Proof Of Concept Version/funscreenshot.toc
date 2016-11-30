@@ -1,0 +1,6 @@
+## Interface: 70000
+## Title: Fun Screenshot
+## Author: kaylo swagchard matthrax
+## SavedVariables: screenshotdata
+## Version: 0.01
+hello.lua
