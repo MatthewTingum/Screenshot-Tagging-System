@@ -1,4 +1,4 @@
-Add these three files(bindings.xml, funscreenshot.toc,and hello.lua) to the ..\World of Warcraft\Interface\AddOns\ directory in a folder named anything
+Add funscreenshot folder to the ..\World of Warcraft\Interface\AddOns\ directory
 
 Bind the addon to any key from the in-game key bindings menu. 
 
