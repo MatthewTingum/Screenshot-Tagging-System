@@ -1,4 +1,6 @@
 ﻿// Matthew Tingum
+// TODO: Create Service to return only a limited number of submissions rather than all
+// TODO: Modify submission get services to return based on some search criteria
 
 var config = require('config.json');
 var _ = require('lodash');

@@ -1,0 +1,11 @@
+Matthew Tingum
+
+	Created:
+		Server/services/submission.service.js
+		Server/app/app-services/submission.service.js
+		Server/controller/api/submissions.controller.js
+	
+	modifications to:
+		Server/app/home/index.controller.js
+		Server/app/home/index.html
+		Client/MainFrame.java

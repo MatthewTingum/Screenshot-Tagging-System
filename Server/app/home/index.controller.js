@@ -1,4 +1,6 @@
-﻿(function () {
+﻿// TODO: sort submissions returned by SubmissionService.GetAll() by some criteria
+
+(function () {
     'use strict';
 
     angular
