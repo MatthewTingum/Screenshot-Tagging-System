@@ -2,13 +2,22 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+
+
 public class MainMenu extends JPanel implements ActionListener{
-    
-    //The MainFrame the MainMenu is connected to
+	
+    //Database variables declared
+	private static final String USER_AGENT = "Mozilla/5.0";
+
+	//private static final String GET_URL = "http://localhost:9090/SpringMVCExample";
+
+	private static final String POST_URL = "http://localhost:3000/submissions/submission";
+	
+	//The MainFrame the MainMenu is connected to
     MainFrame mFrame;
     
     // Constructor for the MainMenu panel
-    public MainMenu(MainFrame mf) {
+    public MainMenu(MainFrame mf)  {
         mFrame = mf;
         
         //The variables for the Main Menu are created here
@@ -24,6 +33,7 @@ public class MainMenu extends JPanel implements ActionListener{
         //Buttons are initialized and ActionListeners are added
         jButton1.setFont(new java.awt.Font("Comic Sans MS", 0, 13)); // NOI18N
         jButton1.setText("Upload Data");
+        jButton1.addActionListener(this);
         
         jButton2.setFont(new java.awt.Font("Comic Sans MS", 0, 13)); // NOI18N
         jButton2.setText("Search Database");
@@ -68,7 +78,7 @@ public class MainMenu extends JPanel implements ActionListener{
                                           .addContainerGap(94, Short.MAX_VALUE))
                                 );
     }
-    
+
     
     //The variables for the Main Menu are declared here here
     private javax.swing.JButton jButton1;
@@ -76,14 +86,23 @@ public class MainMenu extends JPanel implements ActionListener{
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     
+    
     //This function dictates the actions to occur when a button is pressed in the Main Menu
     public void actionPerformed(ActionEvent e){
         Object src=e.getSource();
-        //next button
+		//upload button
+        if(src.equals(jButton1)){
+            // Logic for inerfacing with the API
+			System.out.println("a thing\n");
+			//mFrame.sendPOST();
+		}		
+        //search button
         if(src.equals(jButton2)){
+			//System.out.println("another thing\n");
+			mFrame.sendPOST();
             mFrame.showSearch();
         }
-        //finish button
+        //help button
         if(src.equals(jButton3)){
             JOptionPane.showMessageDialog(null, "These are your instructions.  Good Luck!");
         }

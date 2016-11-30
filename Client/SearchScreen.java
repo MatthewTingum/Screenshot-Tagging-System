@@ -6,7 +6,7 @@ public class SearchScreen extends JPanel implements ActionListener{
     
     //The MainFrame that the SearchScreen is connected to
     MainFrame mFrame;
-   
+    
     //This is the constructor for the SearchScreen panel
     public SearchScreen(MainFrame mf) {
         mFrame = mf;
@@ -17,7 +17,6 @@ public class SearchScreen extends JPanel implements ActionListener{
         jCheckBox2 = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        
         
         //This is where the components are initialized
         jTextField1.setFont(new java.awt.Font("Comic Sans MS", 0, 13)); // NOI18N
@@ -80,7 +79,8 @@ public class SearchScreen extends JPanel implements ActionListener{
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JTextField jTextField1;
-   
+    
+    
     //When a button is pressed, this function determines what to do about it
     public void actionPerformed(ActionEvent e){
         mFrame.showMain();
