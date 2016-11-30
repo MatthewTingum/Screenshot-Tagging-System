@@ -33,7 +33,7 @@ public class MainMenu extends JPanel implements ActionListener{
         //Buttons are initialized and ActionListeners are added
         jButton1.setFont(new java.awt.Font("Comic Sans MS", 0, 13)); // NOI18N
         jButton1.setText("Upload Data");
-        jButton1.addActionListener(this);
+		jButton1.addActionListener(this);
         
         jButton2.setFont(new java.awt.Font("Comic Sans MS", 0, 13)); // NOI18N
         jButton2.setText("Search Database");
@@ -93,16 +93,16 @@ public class MainMenu extends JPanel implements ActionListener{
 		//upload button
         if(src.equals(jButton1)){
             // Logic for inerfacing with the API
-			System.out.println("a thing\n");
-			//mFrame.sendPOST();
+			//System.out.println("a thing\n");
+			mFrame.sendPOST();
 		}		
-        //search button
+        //Search button
         if(src.equals(jButton2)){
 			//System.out.println("another thing\n");
-			mFrame.sendPOST();
+			//mFrame.sendPOST();
             mFrame.showSearch();
         }
-        //help button
+        //Help button
         if(src.equals(jButton3)){
             JOptionPane.showMessageDialog(null, "These are your instructions.  Good Luck!");
         }

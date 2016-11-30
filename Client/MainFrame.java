@@ -19,6 +19,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -29,6 +33,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+
+import org.apache.commons.io.FileUtils;
 
 //MainFrame is the main class that sorts between the different panels for the gui
 public class MainFrame extends JFrame{
@@ -77,49 +83,136 @@ public class MainFrame extends JFrame{
 	
     //Function connects to database and attempts to send data to it
 	public void sendPOST(){
-		System.out.println("Attempting to send post...\n");
-
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(POST_URL);
-		httpPost.addHeader("User-Agent", USER_AGENT);
 		
-		// This is where the user auth token will be (Using a static one for now -- linked to a test account)
-		httpPost.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
-
-		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		// Find and open a log file
+		File file = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\");
+		String[] account = file.list();
 		
-		// Here is where we can add in any data to send to the database
-		urlParameters.add(new BasicNameValuePair("Title", "Troll gets rekt m8"));
-		urlParameters.add(new BasicNameValuePair("Description", "description goes here"));
-		urlParameters.add(new BasicNameValuePair("Tags", "Troll,pokemon go,lettuce"));
-		urlParameters.add(new BasicNameValuePair("Time", "4-20-69:00,00,00"));		// Date/Time format still needs to be figured out
-		urlParameters.add(new BasicNameValuePair("ImagePath", "C:\\data\\images\\image01.png"));
+		File file2 = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\" + account[0] + "\\SavedVariables\\SStagger.lua");
+		BufferedReader reader2 = null;
+		List<String> list = new ArrayList<String>();
+		
+		try {
+			reader2 = new BufferedReader(new FileReader(file2));
+			String text = null;
 
-		try{
-			HttpEntity postParams = new UrlEncodedFormEntity(urlParameters);
-			httpPost.setEntity(postParams);
-
-			CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
-
-			System.out.println("POST Response Status:: "
-				+ httpResponse.getStatusLine().getStatusCode());
-
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-				httpResponse.getEntity().getContent()));
-
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = reader.readLine()) != null) {
-				response.append(inputLine);
+			while ((text = reader2.readLine()) != null) {
+				list.add(text);
 			}
-			reader.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (reader2 != null) {
+				reader2.close();
+				}
+			} catch (IOException e) {
+			}
+		}
+		
+		// Get all screenshot names (Must be done here due to limitations of WoW addon)
+		File screens = new File("C:\\Program Files (x86)\\World of Warcraft\\Screenshots\\");
+		String[] scNames = screens.list();
+		
+		// Start with line 3 and ignore the last line
+		int i = 3;
+		String temp;
+		
+		while (i < list.size() - 1){
+			
+			//System.out.println(list.get(i));
+			temp = list.get(i);
+			String[] splitData = temp.split("\\|");
+			//System.out.println(splitData[0]);
+		
+			System.out.println("Attempting to send post...\n");
 
-			// print result
-			System.out.println(response.toString());
-			httpClient.close();
-		}catch (Exception e){
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+			HttpPost httpPost = new HttpPost(POST_URL);
+			httpPost.addHeader("User-Agent", USER_AGENT);
+		
+			// This is where the user auth token will be (Using a static one for now -- linked to a test account)
+			httpPost.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
+
+			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		
+			// Here is where we can add in any data to send to the database
+			//urlParameters.add(new BasicNameValuePair("Title", "Troll gets rekt m8"));
+			urlParameters.add(new BasicNameValuePair("Description", splitData[1]));
+			urlParameters.add(new BasicNameValuePair("Tags", splitData[2]));
+			urlParameters.add(new BasicNameValuePair("Time", splitData[4]));		// Date/Time format still needs to be figured out
+			urlParameters.add(new BasicNameValuePair("ImagePath", "app-content/images/" + scNames[i - 3]));
+			urlParameters.add(new BasicNameValuePair("Character", splitData[5]));
+			//urlParameters.add(new BasicNameValuePair("Server", splitData[5]));	// The server doesn't like chinese chars
+			urlParameters.add(new BasicNameValuePair("Location", splitData[7]));
+			//urlParameters.add(new BasicNameValuePair("SubLocation", splitData[7]));	// This is problematic due to the way the addon delimits
+
+			try{
+				HttpEntity postParams = new UrlEncodedFormEntity(urlParameters);
+				httpPost.setEntity(postParams);
+
+				CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
+
+				System.out.println("POST Response Status:: "
+					+ httpResponse.getStatusLine().getStatusCode());
+
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+					httpResponse.getEntity().getContent()));
+
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+
+				while ((inputLine = reader.readLine()) != null) {
+					response.append(inputLine);
+				}
+				reader.close();
+
+				// print result
+				System.out.println(response.toString());
+				httpClient.close();
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+			
+			i++;
+		}
+		
+		// Copy all images to server
+		File source = new File("C:\\Program Files (x86)\\World of Warcraft\\Screenshots");
+		File dest = new File("C:\\Matt\\School\\Senioritus\\the one thing\\app\\app-content\\images");
+		
+		try {
+			FileUtils.copyDirectory(source, dest);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		// Delete files from source
+		try {
+			FileUtils.cleanDirectory(source);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// Clear log file
+		file2.delete();
+		
 	}
 }
+
+/*
+datebasename = {
+	"SESSION START AT TINE"
+	"tags|descript|filename|asdsad|asdsad|adsad|asdsad" [1]
+	
+	
+	
+	
+	
+	
+	
+}
+*/
