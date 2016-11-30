@@ -9,3 +9,6 @@ Matthew Tingum
 		Server/app/home/index.controller.js
 		Server/app/home/index.html
 		Client/MainFrame.java
+
+Kristopher Lommen
+	Created: Addon/

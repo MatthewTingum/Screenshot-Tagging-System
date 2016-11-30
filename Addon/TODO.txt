@@ -1,0 +1,10 @@
+non exhaustive list for features/improvements in the near future. (will be updated as time develops)
+
+Cleaned up Code [UI elements are obtrusive and sloppily done in functions they shouldn't be in]
+Better Commenting [Make it less painful for teammates to read through what I'm doing/have done]
+Working User settings menu
+More Refined UI
+Persisting Variables [all custom user settings for addon behavior]
+Ability to change when the screenshot is taken (after clicking hotkey versus after clicking tag button)
+Ability to change resolution of addon from within game
+Ability for certain screenshots to be tagged for deletion in the case of no tags/descr being made
