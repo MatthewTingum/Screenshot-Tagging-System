@@ -5,16 +5,51 @@
 
     angular
         .module('app')
-        .controller('Home.IndexController', Controller)		
+        .controller('Home.IndexController', Controller)	
+		
+		// Filters the list of submissions by some query and criteria
+		// This is a really basic filter (TODO: Make it more comprehensive)
 		.filter('sortFilter', function(){
-		  return function(input){
-			var out = [];
+		  return function(input, query, param){
+			var output = [];
 			angular.forEach(input, function(search){
-				if(search.Location === 'Deathknell'){	
-					out.push(search);
+				//param = "Location"
+				//query = "Deathknell";
+				//var madRegex = "^.*Deathknell.*$";
+				var madRegex = "\bDeathknell\b";
+				
+				//var exp = "^.*"
+				//var exp2 = ".*$";
+				//var madRegex = exp.concat(query);
+				//madRegex = madRegex.concat(exp2);
+				
+				//var madRegex = "^.*Deathknell.*$";	// This one works
+				
+				if (param === 'Location'){
+					// if search.Location contains any part of query then give it the ole' push
+					var match = new RegExp(madRegex);
+					if (match.test(query)){
+						output.push(search);
+					}
 				}
+				/*
+				switch(param) {
+					case param.match(/Location/):
+						output.push(search);
+						break;
+					case 5:
+						//code block
+						break;
+					default:
+						default;// code block
+				}
+				*/
+				// Filter should search by: all, title, tags, location, character, and words / phrases existing in the chat
+				//if(search.Location === 'Deathknell'){	
+					//output.push(search);
+				//}
 			})
-			return out;
+			return output;
 		  }
 		});
 
@@ -46,6 +81,7 @@
 		vm.showSort = true;
 		
 		vm.sorts = ["Newest First", "Oldest First"];
+		vm.params = ["All", "Location"];
 
         initController();
 
