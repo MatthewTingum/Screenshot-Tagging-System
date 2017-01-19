@@ -5,7 +5,19 @@
 
     angular
         .module('app')
-        .controller('Home.IndexController', Controller);
+        .controller('Home.IndexController', Controller)		
+		.filter('sortFilter', function(){
+		  return function(input){
+			var out = [];
+			angular.forEach(input, function(search){
+				if(search.Location === 'Deathknell'){	
+					out.push(search);
+				}
+			})
+			return out;
+		  }
+		});
+
 
     function Controller(UserService, SubmissionService) {
         var vm = this;
@@ -15,6 +27,7 @@
 		vm.loadSub = loadSub;
 		vm.nextPage = nextPage;
 		vm.lastPage = lastPage;
+
 		
 		// Page is either showing results, or showing one particular submission
 		vm.showResults = true;
@@ -102,10 +115,7 @@
 			}
 		}
 		
-		// Searches for a specified query and returns that list
-		function garbageSearch(){
-			
-		}
+		
     }
 
 })();
