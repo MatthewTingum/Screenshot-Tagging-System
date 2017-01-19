@@ -13,12 +13,26 @@
         vm.user = null;
 		vm.loadedSub = loadSub;
 		vm.loadSub = loadSub;
+		vm.nextPage = nextPage;
+		vm.lastPage = lastPage;
 		
 		// Page is either showing results, or showing one particular submission
 		vm.showResults = true;
 		
+		// Method by which to sort results
+		vm.sort = "Time";
+		
 		// All submissions to be displayed
 		vm.submissions = null;
+		
+		// Current page number of submissions
+		// TODO: This is not a good way of handling things, every submission gets loaded all at once which is not needed. Just load 10 at a time. (API returns all submissions)
+		vm.pageNum = 0;
+		vm.showBack = false;
+		vm.showNext = true;
+		vm.showSort = true;
+		
+		vm.sorts = ["Newest First", "Oldest First"];
 
         initController();
 
@@ -36,6 +50,12 @@
 			});
 			
 			
+			// Determine if the next button should be hidden
+			if (vm.pageNum * 10 + 9 >= vm.loadedSub.length){
+				vm.showNext = false;
+			}
+			
+			
         }
 		
 		
@@ -44,6 +64,7 @@
 			
 			vm.curSub = id;
 			vm.showResults = !vm.showResults;
+			vm.showSort = false;
 			
 			SubmissionService.LoadSub(vm.curSub)
                 .then(function (loadedSub) {
@@ -55,11 +76,34 @@
                     FlashService.Error(error);
 					//console.log(":(");
                 });
-		
-			
 			
 			
 			//vm.getSubmissions = UserService.GetSubmissions(user);
+			
+		}
+		
+		// Shows the next set of submissions and handles the last page case
+		function nextPage() {
+			vm.pageNum += 1;
+			vm.showBack = true;
+			
+			// Determine if the next button should be hidden
+			if (vm.pageNum * 10 + 9 >= vm.loadedSub.length){
+				vm.showNext = false;
+			}
+		}
+		
+		// Shows the last set of submissions and handles the page 0 case
+		function lastPage() {
+			vm.pageNum -= 1;
+			
+			if (vm.pageNum == 0){
+				vm.showBack = false;
+			}
+		}
+		
+		// Searches for a specified query and returns that list
+		function garbageSearch(){
 			
 		}
     }

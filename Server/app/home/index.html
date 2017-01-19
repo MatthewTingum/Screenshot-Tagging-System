@@ -1,9 +1,22 @@
 ﻿<!--Matthew Tingum-->
+<!-- This method of searching, sorting, and retrieving submissions is really spaghetti garbage!!! Fix this if extra time (API vs Angular)-->
 <!--TODO: Fancify the submission currntly being shown when !vm.showResults -->
 
 <!--<center><h1>Hi {{vm.user.firstName}}!</h1></center>-->
+<!--(Ascending Creation time) | orderBy: 'Time' -->
+<!--(Descending Creation time) | orderBy: '-Time' -->
 
-<div ng-repeat="x in vm.submissions" style="display:table;border-left: thick solid #000000;border-right: thick solid #000000;border-top: thick solid #000000;border-bottom: thick solid #000000;width:100%;" ng-click="vm.loadSub(x._id)" ng-show="vm.showResults">
+<!--<div ng-repeat="x in vm.submissions | limitTo:4" ng-if="$index >= 1" style="display:table;border-left: thick solid #000000;border-right: thick solid #000000;border-top: thick solid #000000;border-bottom: thick solid #000000;width:100%;" ng-click="vm.loadSub(x._id)" ng-show="vm.showResults">-->
+
+<!-- Div to hold next and back buttons-->
+<div ng-show="vm.showSort">
+	<!-- Sort ascending or descending -->
+	<select ng-model="selectedSort" ng-init="selectedSort = vm.sorts[0]" ng-options="x for x in vm.sorts">
+	</select>
+</div>
+
+<!--Results div (repeating)-->
+<div ng-repeat="x in vm.submissions | orderBy: '-Time'" ng-if="$index >= vm.pageNum * 10 && $index < vm.pageNum * 10 + 9 && selectedSort == 'Newest First'" style="display:table;border-left: thick solid #000000;border-right: thick solid #000000;border-top: thick solid #000000;border-bottom: thick solid #000000;width:100%;" ng-click="vm.loadSub(x._id)" ng-show="vm.showResults">
 <p>
 <span style="vertical-align:middle;display:table-cell;"><img ng-src="{{x.ImagePath}}" alt={{x.Description}} style="width:304px;height:228px;vertical-align:middle;display:table-cell;"/></span>
 <span style="vertical-align:middle;display:table-cell;">
@@ -19,6 +32,31 @@
 </p>
 </div>
 
+<div ng-repeat="x in vm.submissions | orderBy: 'Time'" ng-if="$index >= vm.pageNum * 10 && $index < vm.pageNum * 10 + 9 && selectedSort == 'Oldest First'" style="display:table;border-left: thick solid #000000;border-right: thick solid #000000;border-top: thick solid #000000;border-bottom: thick solid #000000;width:100%;" ng-click="vm.loadSub(x._id)" ng-show="vm.showResults">
+<p>
+<span style="vertical-align:middle;display:table-cell;"><img ng-src="{{x.ImagePath}}" alt={{x.Description}} style="width:304px;height:228px;vertical-align:middle;display:table-cell;"/></span>
+<span style="vertical-align:middle;display:table-cell;">
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<b>{{x.Description}}</b>
+	<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	Tags: {{x.Tags}}
+	<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	{{x.Time}}
+</span>
+</p>
+</div>
+
+
+	<div ng-show="vm.showBack">
+		<a id="" href="" ng-click="vm.lastPage()">Back</a>
+	</div>
+	
+	<div ng-show="vm.showNext">
+		<a id="" href="" ng-click="vm.nextPage()">Next</a>
+	</div>
+</div>
 
 
 <div ng-show="!vm.showResults">
@@ -39,6 +77,6 @@
 </center>
 
 
-<a id="" href="" ng-click="vm.showResults = !vm.showResults">Back</a>
+<a id="" href="" ng-click="vm.showResults = !vm.showResults; vm.showSort = !vm.showSort">Back</a>
 
 </div>
