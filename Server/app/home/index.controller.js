@@ -28,26 +28,26 @@
 					
 				
 					// Location
-					if (input[key].Location.indexOf(query) >= 0 && !found){
+					if (!found && input[key].Location.toLowerCase().indexOf(query.toLowerCase()) >= 0){
 						output.push(search);
 						found = true;
 						//console.log(search);
 					}
 					
 					// Description
-					if (input[key].Description.indexOf(query) >= 0 && !found){
+					if (!found && input[key].Description.toLowerCase().indexOf(query.toLowerCase()) >= 0){
 						output.push(search);
 						found = true;
 					}
 					
 					// Tags
-					if (input[key].Tags.indexOf(query) >= 0 && !found){
+					if (!found && input[key].Tags.toLowerCase().indexOf(query.toLowerCase()) >= 0){
 						output.push(search);
 						found = true;
 					}
 					
 					// Character
-					if (input[key].Character.indexOf(query) >= 0 && !found){
+					if (!found && input[key].Character.toLowerCase().indexOf(query.toLowerCase()) >= 0){
 						output.push(search);
 						found = true;
 					}
@@ -56,25 +56,25 @@
 				
 				
 				if (param === 'Location'){
-					if (input[key].Location.indexOf(query) >= 0){
+					if (input[key].Location.toLowerCase().indexOf(query.toLowerCase()) >= 0){
 						output.push(search);
 					}
 				}
 				
 				if (param === 'Description'){
-					if (input[key].Description.indexOf(query) >= 0){
+					if (input[key].Description.toLowerCase().indexOf(query.toLowerCase()) >= 0){
 						output.push(search);
 					}
 				}
 				
 				if (param === 'Tags'){
-					if (input[key].Tags.indexOf(query) >= 0){
+					if (input[key].Tags.toLowerCase().indexOf(query.toLowerCase()) >= 0){
 						output.push(search);
 					}
 				}
 				
 				if (param === 'Character'){
-					if (input[key].Character.indexOf(query) >= 0){
+					if (input[key].Character.toLowerCase().indexOf(query.toLowerCase()) >= 0){
 						output.push(search);
 					}
 				}
