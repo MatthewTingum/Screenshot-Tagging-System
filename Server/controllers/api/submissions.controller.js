@@ -10,6 +10,7 @@ var submissionService = require('services/submission.service');
 router.post('/submission', submissionPost);
 router.get('/submission', submissionGet);
 router.get('/loadSub/:_id', loadSub);
+router.put('/updateSub/:_id', updateSub);
 
 module.exports = router;
 
@@ -42,6 +43,40 @@ function loadSub(req, res) {
 	//console.log(req.params);
 	
 	submissionService.loadSub(req.params._id)
+        .then(function (retSub) {
+            if (retSub) {
+                res.send(retSub);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+		
+}
+
+// Updates an existing submission
+function updateSub(req, res) {
+	
+	//console.log(req.params);
+	//console.log(req.user.sub);
+	//console.log("\n\n\n\n\n\nSEPARATION\n\n\n\n\n");
+	//console.log(req.sub);
+	//console.log(req.params);
+	
+	//if (req.params._id !== req.user.sub) {
+	if (req.body.UID !== req.user.sub) {
+		
+		console.log("This submission doesn't belong to you... good try tho\n");
+		console.log(req.body.UID);
+		console.log(req.user.sub);
+		
+        // can only update own account
+        return res.status(401).send('You can only update your own account');
+    }
+	
+	submissionService.updateSub(req.params._id, req.body)
         .then(function (retSub) {
             if (retSub) {
                 res.send(retSub);

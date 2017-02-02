@@ -16,6 +16,7 @@ var service = {};
 service.submissionPost = submissionPost;
 service.submissionGet = submissionGet;
 service.loadSub = loadSub;
+service.updateSub = updateSub;
 
 module.exports = service;
 
@@ -79,4 +80,43 @@ function loadSub(_id) {
     });
 
     return deferred.promise;
+}
+
+// Updates an existing submission
+// I screwed up the naming of this... 'other' should really be body, and 'body' is really just user-ID... TODO
+function updateSub(body, other) {
+    var deferred = Q.defer();
+	
+	var set = {
+            Description: other.Description,
+            Tags: other.Tags,
+            Time: other.Time,
+			Character: other.Character,
+			Location: other.Location,
+    };
+	
+	console.log("A THING IS HAPPENING\n");
+	console.log(set);
+	//console.log(body);
+	
+	db.submissions.update(
+            { _id: mongo.helper.toObjectID(body) },
+            { $set: set },
+            function (err, doc) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve();
+			}
+	);
+
+	/*
+    db.submissions.insert(
+        body,
+        function (err, doc) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+
+            deferred.resolve();
+        });
+	*/
+
+	return deferred.promise;
 }

@@ -1,12 +1,28 @@
-﻿// TODO: sort submissions returned by SubmissionService.GetAll() by some criteria
+﻿// Page displays only the currently logged in user's content submissions
 
 (function () {
     'use strict';
 
     angular
         .module('app')
-        .controller('Home.IndexController', Controller)	
-		
+        .controller('Content.IndexController', Controller)
+/*
+		// Filters submissions to just those of the currently logged in user
+		.filter('userFilter', function(){
+		  return function(input, currentUID){
+			var output = [];
+			angular.forEach(input, function(search, key){
+			
+				// Location
+				if (input[key].UID === currentUID){
+					output.push(search);
+				}				
+
+			})
+			return output;
+		  }
+		})
+	*/	
 		// Filters the list of submissions by some query and criteria
 		// This is a really basic filter (TODO: Make it more comprehensive)
 		.filter('sortFilter', function(){
@@ -130,8 +146,9 @@
 			
 			// Get all submissions from database for display on page			
 			SubmissionService.GetAll().then(function (submissions) {
-				vm.submissions = submissions;
-				console.log(submissions);
+				
+				// Filter submissions to those with the same user id as the currently logged in user				
+				vm.submissions = submissions.filter(filterSubs);
 			});
 			
 			
@@ -142,6 +159,11 @@
 			
 			
         }
+		
+		function filterSubs(submission){
+			//console.log(submission);
+			return submission.UID === vm.user._id;
+		}
 		
 		
 		// Hides all search results and shows just the one result clicked on by user
@@ -165,7 +187,8 @@
 			if (vm.loadedSub.UID === vm.user._id){
 				vm.showEditBtn = true;
 			}
-			//vm.showEditBtn = true;
+			
+			
 			//vm.getSubmissions = UserService.GetSubmissions(user);
 			
 		}

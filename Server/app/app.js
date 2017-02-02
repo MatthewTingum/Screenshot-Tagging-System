@@ -24,6 +24,13 @@
                 controller: 'Account.IndexController',
                 controllerAs: 'vm',
                 data: { activeTab: 'account' }
+            })
+			.state('my content', {
+                url: '/content',
+                templateUrl: 'account/content.html',
+                controller: 'Content.IndexController',
+                controllerAs: 'vm',
+                data: { activeTab: 'my content' }
             });
 			
 			$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob|local|c):|data:image\//);
