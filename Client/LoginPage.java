@@ -3,7 +3,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 //Libraries for connecting to database
-/*
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,22 +26,22 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
 import org.apache.commons.io.FileUtils;
-//*/
+
+
 
 
 
 public class LoginPage extends JPanel implements ActionListener{
 
 	MainFrame mFrame;
+	
+	private static final String LOGIN_URL = "http://localhost:3000/api/users/authenticate";
+	private static final String USER_AGENT = "Mozilla/5.0";
                       
     public LoginPage(MainFrame mf) {
 		
 		mFrame = mf;
 		
-		/*
-		private static final String LOGIN_URL = "http://localhost:3000/api/users/authenticate";
-		private static final String USER_AGENT = "Mozilla/5.0";
-		//*/
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -115,9 +115,9 @@ public class LoginPage extends JPanel implements ActionListener{
 		Object src=e.getSource();
 		//upload button
         if(src.equals(jButton2)){
-			/*
-			String s1 = "username"; //get from textfield1
-			String s2 = "password"; //get from textfield2
+			
+			String s1 = "test"; //get from textfield1 (username)
+			String s2 = "test"; //get from textfield2 (password)
 			
 			
 			CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -139,8 +139,8 @@ public class LoginPage extends JPanel implements ActionListener{
 
 				CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
 
-				System.out.println("POST Response Status:: "
-					+ httpResponse.getStatusLine().getStatusCode());
+				//System.out.println("POST Response Status:: "
+				//	+ httpResponse.getStatusLine().getStatusCode());
 
 				BufferedReader reader = new BufferedReader(new InputStreamReader(
 					httpResponse.getEntity().getContent()));
@@ -154,12 +154,13 @@ public class LoginPage extends JPanel implements ActionListener{
 				reader.close();
 
 				// print result
-				System.out.println(response.toString());
+				String[] splitData = response.toString().split("\"");
+				System.out.println(splitData[3]);	// Token
 				httpClient.close();
-			}catch (Exception e){
-				e.printStackTrace();
+			}catch (Exception err){
+				err.printStackTrace();
 			}
-			//*/
+			
 		}
 		else {
 			mFrame.showMain();
