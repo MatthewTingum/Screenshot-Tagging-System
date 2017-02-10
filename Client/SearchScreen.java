@@ -83,6 +83,12 @@ public class SearchScreen extends JPanel implements ActionListener{
     
     //When a button is pressed, this function determines what to do about it
     public void actionPerformed(ActionEvent e){
-        mFrame.showMain();
+		Object src=e.getSource();
+		//upload button
+        if(src.equals(jButton1)) {
+			
+		}
+		else 
+			mFrame.showMain();
     }
 }

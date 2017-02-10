@@ -19,11 +19,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 
-
+///*
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -35,6 +36,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
 import org.apache.commons.io.FileUtils;
+//*/
 
 //MainFrame is the main class that sorts between the different panels for the gui
 public class MainFrame extends JFrame{
@@ -44,6 +46,7 @@ public class MainFrame extends JFrame{
     CardLayout c = new CardLayout();
     MainMenu menu = new MainMenu(this);
     SearchScreen search = new SearchScreen(this);
+    LoginPage logPage = new LoginPage(this);
 	
     //Variables for purpose of connecting to database declared here
 	private static final String USER_AGENT = "Mozilla/5.0";
@@ -66,6 +69,7 @@ public class MainFrame extends JFrame{
         p.setLayout(c);
         p.add(menu, "mPage");
         p.add(search, "sPage");
+        p.add(logPage, "lPage");
         c.show(p, "mPage");
         add(p);
         setVisible(true);
@@ -81,8 +85,13 @@ public class MainFrame extends JFrame{
         c.show(p, "sPage");
     }
 	
-    //Function connects to database and attempts to send data to it
+	//This function activates when a button is pushed that should take you to the Login Page
+	public void showLog() {
+		c.show(p, "lPage");
+	}
+	
 	public void sendPOST(){
+		///*
 		
 		// Find and open a log file
 		File file = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\");
@@ -199,8 +208,9 @@ public class MainFrame extends JFrame{
 		
 		// Clear log file
 		file2.delete();
-		
+		//*/
 	}
+	
 }
 
 /*

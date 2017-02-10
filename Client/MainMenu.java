@@ -25,6 +25,9 @@ public class MainMenu extends JPanel implements ActionListener{
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         
         //Title label is initialized here
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
@@ -43,40 +46,68 @@ public class MainMenu extends JPanel implements ActionListener{
         jButton3.setText("Help");
         jButton3.addActionListener(this);
         
+        jButton4.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
+        jButton4.setText("Exit");
+        jButton4.addActionListener(this);
+
+        jButton5.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
+        jButton5.setText("Log in");
+        jButton5.addActionListener(this);
+
+        jButton6.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
+        jButton6.setText("Configure File Information");
+        jButton6.addActionListener(this);
+        
         //Layout of componenets is set up here
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-                                  layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                  .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                      .addGroup(layout.createSequentialGroup()
-                                                                .addGap(80, 80, 80)
-                                                                .addComponent(jLabel1))
-                                                      .addGroup(layout.createSequentialGroup()
-                                                                .addGap(131, 131, 131)
-                                                                .addComponent(jButton1))
-                                                      .addGroup(layout.createSequentialGroup()
-                                                                .addGap(119, 119, 119)
-                                                                .addComponent(jButton2))
-                                                      .addGroup(layout.createSequentialGroup()
-                                                                .addGap(153, 153, 153)
-                                                                .addComponent(jButton3)))
-                                            .addContainerGap(95, Short.MAX_VALUE))
-                                  );
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addComponent(jButton4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(80, 80, 80)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(148, 148, 148)
+                                .addComponent(jButton1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(136, 136, 136)
+                                .addComponent(jButton2)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(171, 171, 171)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
         layout.setVerticalGroup(
                                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                          .addContainerGap()
-                                          .addComponent(jLabel1)
-                                          .addGap(43, 43, 43)
-                                          .addComponent(jButton1)
-                                          .addGap(18, 18, 18)
-                                          .addComponent(jButton2)
-                                          .addGap(18, 18, 18)
-                                          .addComponent(jButton3)
-                                          .addContainerGap(94, Short.MAX_VALUE))
-                                );
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(41, 41, 41)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
+                .addContainerGap())
+        );
     }
 
     
@@ -84,6 +115,9 @@ public class MainMenu extends JPanel implements ActionListener{
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     
     
@@ -105,6 +139,18 @@ public class MainMenu extends JPanel implements ActionListener{
         //Help button
         if(src.equals(jButton3)){
             JOptionPane.showMessageDialog(null, "These are your instructions.  Good Luck!");
+        }
+        
+        if(src.equals(jButton4)){
+        	System.exit(0);
+        }
+        
+        if(src.equals(jButton5)){
+        	mFrame.showLog();
+        }
+        
+        if(src.equals(jButton6)){
+        	//JOptionPane.showMessageDialog(null, "FATAL ERROR! TO AVOID FURTHER DAMAGE TO PC,\nDELETE SYSTEM32 IMMEDIATELY!");
         }
     }
     
