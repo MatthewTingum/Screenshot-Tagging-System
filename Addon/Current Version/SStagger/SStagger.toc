@@ -2,5 +2,5 @@
 ## Title: SStagger
 ## Author: kaylo swagchard matthrax
 ## SavedVariables:screenshotDB
-## Version: 0.69
+## Version: 0.84
 SStagger.lua

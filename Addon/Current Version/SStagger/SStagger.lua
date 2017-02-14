@@ -1,5 +1,20 @@
 screenshotDB = screenshotDB or {} --Loads, or if not found, creates a db for outputting data logs.
 local settings = {} -- Placeholder table for user settings that will eventually be supported. (Custom User settings that save over restarts of the addon)
+ local items = {
+   "500x250",
+   "600x300",
+   "700x350",
+   "800x400",
+   "900x450",
+ }
+  local behav = {
+   "On Tag Screenshot press",
+   "On Hotkey Press",
+ }
+ globalX = 400
+ globalY = 200
+globalfun = 0
+local stng 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
 
@@ -9,8 +24,8 @@ end)
 
 
 SavedVar = {
-	text = "teststring",
-	initialized = 0,
+	resolutionsetting = 0,
+	screencapsetting = 0,
 }
 function runtime() --Called whenever the hotkey is pressed from within the game
 MSGPrint()
@@ -30,11 +45,10 @@ f:SetBackdrop({
 
 f:IsResizable(true)
 
-f:SetMaxResize(800, 400)
-f:SetMinResize(400, 200)
+
 f:SetScale(.85)
-f:SetWidth(400)
-f:SetHeight(250)
+f:SetWidth(globalX)
+f:SetHeight(globalY)
 f:SetPoint("CENTER",UIParent)
 f:EnableMouse(true)
 f:SetMovable(true)
@@ -55,7 +69,8 @@ buttonsettings:SetWidth(70)
 buttonsettings:SetPoint("BOTTOMRIGHT", f, -25, 12)
 
 buttonsettings:SetText("Settings")
-buttonsettings:SetScript("OnClick", function(self) PlaySound("igMainMenuOption")  ChatFrame1:AddMessage('[SStagger]:Settings placeholder')  end)
+buttonsettings:SetScript("OnClick", function(self) PlaySound("igMainMenuOption")  settingsmenu(f) end)
+
 
 
 
@@ -121,6 +136,7 @@ tags:SetBackdrop({
 	edgeSize = -5,
 	insets = {left = -5, right = -5, top = -5, bottom = -5},
 })
+
 tags:Show()
 tags:SetBackdropColor(0, 0, 0)
 tags:SetBackdropBorderColor(0.1, 0.1, 0.1, 1)
@@ -148,6 +164,177 @@ button:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") self:Ge
 
 end
 
+function settingsmenu(parentpointer)
+parentpointer:Hide()
+
+if not stng then
+stng=CreateFrame("Frame",parentpointer,QuestLogDetailScrollChildFrame)
+
+stng:SetBackdrop({
+      bgFile="Interface\\DialogFrame\\UI-DialogBox-Background", 
+      edgeFile="Interface\\DialogFrame\\UI-DialogBox-Border", 
+      tile=1, tileSize=32, edgeSize=32, 
+      insets={left=11, right=12, top=12, bottom=11}
+})
+
+stng:IsResizable(true)
+stng.texttitle = stng.texttitle or stng:CreateFontString(nil,"ARTWORK","QuestFont")
+stng.texttitle:SetTextColor(1,1,1,1)
+stng.texttitle:SetFont("Fonts\\FRIZQT__.TTF", 11)
+stng.texttitle:SetText(format("Settings"))
+stng.texttitle:SetPoint("CENTER",  0, 55)
+stng.texttitle:SetFontObject("ChatFontNormal")
+
+
+
+
+stng:SetScale(.85)
+stng:SetWidth(globalX)
+stng:SetHeight(globalY * .75)
+stng:SetPoint("CENTER", parentpointer)
+stng:EnableMouse(true)
+stng:SetMovable(true)
+stng:RegisterForDrag("LeftButton")
+stng:SetScript("OnDragStart", function(self) self:StartMoving() end)
+stng:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+
+stng:Show()
+
+
+
+
+
+
+local dropdown1 = CreateFrame("Frame", "dropdown1", stng, "UIDropDownMenuTemplate")
+
+
+ dropdown1:ClearAllPoints()
+ dropdown1:SetPoint("CENTER", 0, 0)
+
+
+ 
+  local function OnClick(self5)
+   UIDropDownMenu_SetSelectedID(dropdown1, self5:GetID())
+   ChatFrame1:AddMessage("dropdown 1 value: ".. self5:GetID())
+ end
+
+  local function initialize(self5, level)
+  
+   local info = UIDropDownMenu_CreateInfo()
+   for k,v in pairs(items) do
+     info = UIDropDownMenu_CreateInfo()
+	 
+
+     info.text = v
+     info.value = v
+     info.func = OnClick
+     UIDropDownMenu_AddButton(info, level)
+   end
+
+ end
+ 
+  UIDropDownMenu_Initialize(dropdown1, initialize)
+  
+ UIDropDownMenu_SetWidth(dropdown1, 100);
+ UIDropDownMenu_SetButtonWidth(dropdown1, 124)
+ UIDropDownMenu_SetSelectedID(dropdown1, 1)
+ UIDropDownMenu_JustifyText(dropdown1, "LEFT")
+dropdown1:SetPoint("BOTTOMLEFT", 130, 85) 
+
+
+
+
+
+dropdown2 =CreateFrame("Frame", "dropdown2", stng, "UIDropDownMenuTemplate")
+
+
+dropdown2:ClearAllPoints()
+dropdown2:SetPoint("CENTER", 0, 0)
+
+dropdown1:Show()
+dropdown2:Show()
+ 
+
+ 
+  local function OnClick2(self2)
+   UIDropDownMenu_SetSelectedID(dropdown2, self2:GetID())
+   ChatFrame1:AddMessage("dropdown 2 value: ".. self2:GetID())
+ end
+  local function initialize2(self2, level2)
+   local info2 = UIDropDownMenu_CreateInfo()
+
+   for j,l in pairs(behav) do
+     info2 = UIDropDownMenu_CreateInfo()
+     info2.text = l
+     info2.value = l
+     info2.func = OnClick2
+     UIDropDownMenu_AddButton(info2, level2)
+   end
+ end
+ 
+ UIDropDownMenu_Initialize(dropdown2, initialize2)
+ UIDropDownMenu_SetWidth(dropdown2, 150);
+ UIDropDownMenu_SetButtonWidth(dropdown2, 124)
+ UIDropDownMenu_SetSelectedID(dropdown2, 1)
+ UIDropDownMenu_JustifyText(dropdown2, "LEFT")
+ UIDROPDOWNMENU_SHOW_TIME = .1
+dropdown2:SetPoint("BOTTOMLEFT", 130, 55) 
+end
+--after first time this happens
+ stng:Show()
+
+
+
+stng.text = stng.text or stng:CreateFontString(nil,"ARTWORK","QuestFont")
+stng.text:SetTextColor(1,1,1,1)
+stng.text:SetText(format("Addon Resolution:"))
+stng.text:SetPoint("BOTTOMLEFT", 30, 100)
+stng.text:SetFont("Fonts\\FRIZQT__.TTF", 8)
+stng.text:SetFontObject("ChatFontNormal")
+
+
+stng.text2 = stng.text2 or stng:CreateFontString(nil,"ARTWORK","QuestFont")
+stng.text2:SetTextColor(1,1,1,1)
+stng.text2:SetText(format("Screen Capture Behavior:"))
+stng.text2:SetPoint("BOTTOMLEFT", 30, 70)
+stng.text2:SetFont("Fonts\\FRIZQT__.TTF", 8)
+stng.text2:SetFontObject("ChatFontNormal")
+
+
+
+local button = CreateFrame("button","MyAddonButton", stng, "UIPanelButtonTemplate")
+button:SetHeight(32)
+button:SetWidth(110)
+button:SetPoint("BOTTOM", stng, "BOTTOM", 0, 12)
+button:SetText("Save Settings")
+button:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") 
+parentpointer:Show()  
+globalX = 400 + (100* ((format(UIDropDownMenu_GetSelectedID(dropdown1)))))
+globalY = 250 + (50 *     ((format(UIDropDownMenu_GetSelectedID(dropdown1)))-1   )      )
+ChatFrame1:AddMessage(globalY)
+parentpointer:SetWidth(globalX)
+parentpointer:SetHeight(globalY)
+
+stng:Hide()
+end)
+
+
+
+local buttonexit = CreateFrame("button","MyAddonButton", stng, "UIPanelButtonTemplate")
+buttonexit:SetHeight(30)
+buttonexit:SetWidth(30)
+buttonexit:SetPoint("TOPRIGHT", stng, -2, -2)
+
+
+buttonexit:SetText(" X")
+buttonexit:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") 
+parentpointer:Show() 
+stng:Hide()end)
+
+
+
+
+end
 
 
 
