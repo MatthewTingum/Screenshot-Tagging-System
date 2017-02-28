@@ -1,6 +1,6 @@
 ## Interface: 70100
 ## Title: SStagger
 ## Author: kaylo swagchard matthrax
-## SavedVariables:screenshotDB
+## SavedVariables:screenshotDB,UISettings
 ## Version: 0.84
 SStagger.lua
