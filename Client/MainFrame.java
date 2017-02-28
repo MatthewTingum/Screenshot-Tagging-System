@@ -29,12 +29,14 @@ import java.io.FileNotFoundException;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.mime.content.FileBody;
 
 import org.apache.commons.io.FileUtils;
 //*/
@@ -240,33 +242,92 @@ public class MainFrame extends JFrame{
 		}
 		
 		// Copy all images to server
-		File source = new File("C:\\Program Files (x86)\\World of Warcraft\\Screenshots");
+		//File source = new File("C:\\Program Files (x86)\\World of Warcraft\\Screenshots");
 		File dest = new File("C:\\Matt\\School\\Senioritus\\the one thing\\app\\app-content\\images");
 		//File dest = new File("C:\\Users\\kirby\\Desktop\\CSCI493\\github\\Screenshot-Tagging-System\\Server\\app\\app-content");
-		/*
+
+
+		
 		// Upload images to imgur through the api
-		String imgurEndpoint = "https:\\api.imgur.com\\3\\image";
+		String imgurEndpoint = "https://api.imgur.com/3/image";
 		String clientID = "d56856daacda1ed";
 		
-		HttpPost httpPost2 = new HttpPost(POST_URL);
-		httpPost2.addHeader("User-Agent", USER_AGENT);
-		httpPost2.addHeader("Authorization", "Client-ID " . clientID);
 		
-		MultipartEntity reqEntity =  new MultipartEntity();
-		reqEntity.addPart("image", new FileBody(""));
-		*/
+		
+		HttpPost httpPost2 = new HttpPost(imgurEndpoint);
+		httpPost2.addHeader("User-Agent", USER_AGENT);
+		httpPost2.addHeader("Authorization", "Client-ID " + clientID);
+		
+		
+		
+
+		File folder = new File("C:\\Program Files (x86)\\World of Warcraft\\Screenshots");
+		File[] listOfFiles = folder.listFiles();
+
+
+		CloseableHttpClient httpClient2 = HttpClients.createDefault();
+		
+		
+
+		//for (File file : files) {
+		for (int j = 0; j < listOfFiles.length; j++) {
+			if (listOfFiles[j].isFile()) {
+				
+				File fTemp = new File("C:\\Program Files (x86)\\World of Warcraft\\Screenshots\\" + listOfFiles[j].getName());
+
+				MultipartEntity reqEntity =  new MultipartEntity();
+				reqEntity.addPart("image", new FileBody(fTemp));
+				//System.out.println("file: " + file.getCanonicalPath());
+
+
+				try{
+
+					httpPost2.setEntity(reqEntity);
+					CloseableHttpResponse httpResponse2 = httpClient2.execute(httpPost2);
+					
+					
+						System.out.println("IMGUR-POST Response Status:: "
+							+ httpResponse2.getStatusLine().getStatusCode());
+
+						BufferedReader reader = new BufferedReader(new InputStreamReader(
+							httpResponse2.getEntity().getContent()));
+
+						String inputLine;
+						StringBuffer response = new StringBuffer();
+
+						while ((inputLine = reader.readLine()) != null) {
+							response.append(inputLine);
+						}
+						reader.close();
+
+						// print result
+						System.out.println(response.toString());
+
+
+
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		/*
+
 		try {
 			FileUtils.copyDirectory(source, dest);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		*/
 		// Delete files from source
+		/*
 		try {
 			FileUtils.cleanDirectory(source);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		// Clear log file
 		file2.delete();
