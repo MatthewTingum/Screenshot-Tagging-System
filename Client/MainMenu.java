@@ -15,6 +15,7 @@ public class MainMenu extends JPanel implements ActionListener{
 	
 	//The MainFrame the MainMenu is connected to
     MainFrame mFrame;
+	
     
     // Constructor for the MainMenu panel
     public MainMenu(MainFrame mf)  {
@@ -119,6 +120,17 @@ public class MainMenu extends JPanel implements ActionListener{
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
+	
+	public void setLoginText()
+	{
+		if(mFrame.loggedIN){
+			jButton5.setText("Log out");
+		}
+		else
+		{
+			jButton5.setText("Log in");
+		}
+	}
     
     
     //This function dictates the actions to occur when a button is pressed in the Main Menu
@@ -128,7 +140,17 @@ public class MainMenu extends JPanel implements ActionListener{
         if(src.equals(jButton1)){
             // Logic for inerfacing with the API
 			//System.out.println("a thing\n");
-			mFrame.sendPOST();
+			//mFrame.startSEND();
+			if (mFrame.loggedIN)
+			{
+				mFrame.startSEND();
+			}
+			else
+			{
+				mFrame.startSEND();
+				//JOptionPane.showMessageDialog(null, "Error: Must be logged in to upload data.");
+				System.out.println("not logged in");
+			}
 		}		
         //Search button
         if(src.equals(jButton2)){
@@ -146,10 +168,18 @@ public class MainMenu extends JPanel implements ActionListener{
         }
         
         if(src.equals(jButton5)){
-        	mFrame.showLog();
+			if (mFrame.loggedIN){
+				mFrame.loggedIN = false;
+				mFrame.loginToken = "UA";
+				setLoginText();
+			}
+			else {
+				mFrame.showLog();
+			}
         }
         
         if(src.equals(jButton6)){
+			mFrame.findDirectory();
         	//JOptionPane.showMessageDialog(null, "FATAL ERROR! TO AVOID FURTHER DAMAGE TO PC,\nDELETE SYSTEM32 IMMEDIATELY!");
         }
     }

@@ -116,13 +116,8 @@ public class LoginPage extends JPanel implements ActionListener{
 		//upload button
         if(src.equals(jButton2)){
 			
-			String s1 = "test"; //get from textfield1 (username)
-			String s2 = "test"; //get from textfield2 (password)
-			
-			
-			CloseableHttpClient httpClient = HttpClients.createDefault();
-			HttpPost httpPost = new HttpPost(LOGIN_URL);
-			httpPost.addHeader("User-Agent", USER_AGENT);
+			String s1 = jTextField1.getText(); //get from textfield1 (username)
+			String s2 = jTextField2.getText(); //get from textfield2 (password)
 		
 			// This is where the user auth token will be (Using a static one for now -- linked to a test account)
 			//httpPost.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
@@ -134,6 +129,10 @@ public class LoginPage extends JPanel implements ActionListener{
 			urlParameters.add(new BasicNameValuePair("password", s2));
 			
 			try{
+				CloseableHttpClient httpClient = HttpClients.createDefault();
+				HttpPost httpPost = new HttpPost(LOGIN_URL);
+				httpPost.addHeader("User-Agent", USER_AGENT);
+				
 				HttpEntity postParams = new UrlEncodedFormEntity(urlParameters);
 				httpPost.setEntity(postParams);
 
@@ -154,11 +153,23 @@ public class LoginPage extends JPanel implements ActionListener{
 				reader.close();
 
 				// print result
-				String[] splitData = response.toString().split("\"");
-				System.out.println(splitData[3]);	// Token
+				if (response.toString().equals("Username or password is incorrect")){
+					JOptionPane.showMessageDialog(null, response.toString());
+				}
+				else
+				{
+					String[] splitData = response.toString().split("\"");
+					System.out.println(splitData[3]);	// Token
+					String myToken = splitData[3];
+					mFrame.loginToken = "Bearer " + myToken;
+					mFrame.loggedIN = true;
+					System.out.println(mFrame.loginToken);
+					mFrame.showMain();
+				}
 				httpClient.close();
 			}catch (Exception err){
-				err.printStackTrace();
+				System.out.println("Error");
+				//err.printStackTrace();
 			}
 			
 		}

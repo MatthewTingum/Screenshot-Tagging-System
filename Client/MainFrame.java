@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
+import javax.swing.JFileChooser;
 import java.awt.CardLayout;
 import java.util.Random;
 import javax.swing.JOptionPane;
@@ -54,6 +55,12 @@ public class MainFrame extends JFrame{
 	//private static final String GET_URL = "http://localhost:9090/SpringMVCExample";
 
 	private static final String POST_URL = "http://localhost:3000/api/submissions/submission";
+	
+	public String loginToken = "UA";
+	public boolean loggedIN = false;
+	
+	//File config stuff
+	FileConfig fCon = new FileConfig();
     
     //Creates a new MainFrame object
     public static void main(String args[]) {
@@ -78,6 +85,7 @@ public class MainFrame extends JFrame{
     //This function activates when a button is pushed that should take you to the Main Menu
     public void showMain() {
         c.show(p, "mPage");
+		menu.setLoginText();
     }
     
     //This function activates when a button is pushed that should take you to the Search Page
@@ -90,6 +98,48 @@ public class MainFrame extends JFrame{
 		c.show(p, "lPage");
 	}
 	
+	//*
+	public void findDirectory(){						
+		JFileChooser chooser = new JFileChooser(); 
+		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setDialogTitle("Please select World of Warcraft Folder");
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    //
+    // disable the "All files" option.
+    //
+		chooser.setAcceptAllFileFilterUsed(false);
+    //    
+		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+			String directory = chooser.getSelectedFile().getAbsolutePath();
+			fCon.saveFileInfo(directory);
+		}
+	}
+	//*/
+	
+	
+    //Function connects to database and attempts to send data to it
+	//*
+	public void startSEND(){
+		String directory = fCon.getFileInfo();
+		File file1 = new File(directory + "\\WTF\\Account\\");
+		if (file1.exists() && file1.isDirectory()){
+			sendPOST();
+			System.out.println("Found in configs\n" + file1.getAbsolutePath());
+		}
+		else {
+			File file2 = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\");
+			if (file2.exists() && file2.isDirectory()) {
+				sendPOST();
+				System.out.println("Found as default");
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Error: The directory for World of Warcraft was not found.  Please\n"+
+														"select the World of Warcraft directory from the Configuration option");
+			}
+		}
+		
+	}
+	//*/
 	public void sendPOST(){
 		///*
 		
@@ -144,7 +194,7 @@ public class MainFrame extends JFrame{
 			httpPost.addHeader("User-Agent", USER_AGENT);
 		
 			// This is where the user auth token will be (Using a static one for now -- linked to a test account)
-			httpPost.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
+			httpPost.addHeader("Authorization", loginToken);
 
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		
@@ -192,7 +242,19 @@ public class MainFrame extends JFrame{
 		// Copy all images to server
 		File source = new File("C:\\Program Files (x86)\\World of Warcraft\\Screenshots");
 		File dest = new File("C:\\Matt\\School\\Senioritus\\the one thing\\app\\app-content\\images");
+		//File dest = new File("C:\\Users\\kirby\\Desktop\\CSCI493\\github\\Screenshot-Tagging-System\\Server\\app\\app-content");
+		/*
+		// Upload images to imgur through the api
+		String imgurEndpoint = "https:\\api.imgur.com\\3\\image";
+		String clientID = "d56856daacda1ed";
 		
+		HttpPost httpPost2 = new HttpPost(POST_URL);
+		httpPost2.addHeader("User-Agent", USER_AGENT);
+		httpPost2.addHeader("Authorization", "Client-ID " . clientID);
+		
+		MultipartEntity reqEntity =  new MultipartEntity();
+		reqEntity.addPart("image", new FileBody(""));
+		*/
 		try {
 			FileUtils.copyDirectory(source, dest);
 		} catch (IOException e) {
