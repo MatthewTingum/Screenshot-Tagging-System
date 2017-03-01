@@ -73,11 +73,8 @@ function loadSettings() --Initial User settings are loaded in function loadSetti
 
 				-- Loop through the source table and we will place the values into the received output table
 				for i, j in pairs(source) do
-					--If the values are different we will overwrite the output's value with the source's value
-					if type(j) ~= type(output[i]) then
-						output[i] = j
+					output[i] = j	
 					
-					end
 				end
 			
 			return output --Return output table with the defaulted values
@@ -85,8 +82,8 @@ function loadSettings() --Initial User settings are loaded in function loadSetti
 	
 	local function firstTimestamp()-- Function firstTimestamp() logs the first line to the output file as a timestamp file. This is needed to seperate game sessions in the log file for future analysis.	
 				ChatFrame1:AddMessage("[SStagger]:Logged session start at "..timestart)
-				tinsert(screenshotDB, "SESSION START AT ".. timestart.." SAVED TO ../SavedVariables/SStagger.lua.. " ) --Logs string data into the table screenshotDB with the function tinsert()
-		end
+				tinsert(screenshotDB, "/!!/PLAYER "..UnitName("player").." SESSION START AT ".. timestart.."/!!/") --Logs string data into the table screenshotDB with the function tinsert()
+	end
 			
 	UISettings = UISettings or {} -- Reuses the existing UISettings table if present. If not an empty table is made for the settings. This is stored in the LUA log file
 	firstTimestamp()	      -- Calls function to place first timestamp
@@ -98,7 +95,7 @@ function loadSettings() --Initial User settings are loaded in function loadSetti
 end
 
 function end_session() --Logs the timestamp and duration of the game session at the end of last log
-	tinsert(screenshotDB, "PLAYER "..UnitName("player").." SESSION ENDED AT ".. date("%m/%d/%y %H:%M:%S")) --Logs the session end into the log file. Will allow for game sessions to be split up from the Local Application
+	tinsert(screenshotDB, "/??/PLAYER "..UnitName("player").." SESSION ENDED AT ".. date("%m/%d/%y %H:%M:%S").."/??/") --Logs the session end into the log file. Will allow for game sessions to be split up from the Local Application
 	return nil
 end
 

@@ -1,7 +1,13 @@
 
 screenshotDB = {
-	"SESSION START AT 11/29/16 21:43:29 SAVED TO ../World of Warcraft/WTF/Account/354292016#1/SavedVariables/SStagger.lua.. ", -- [1]
-	"|troll|nice,mean,game|WoWScrnShot_112916_214408.jpg|11/29/16 21:44:08|Moslenick|Dalaran|Deathknell|Deathknell|", -- [2]
-	"|me being a gamer online|happy,fun,existentialism|WoWScrnShot_112916_214427.jpg|11/29/16 21:44:27|Moslenick|Dalaran|Deathknell|Deathknell|", -- [3]
-	"|dead skeleton |dead,evil,skeleton,horde|WoWScrnShot_112916_214448.jpg|11/29/16 21:44:48|Moslenick|Dalaran|Deathknell|Deathknell|", -- [4]
+	"/!!/PLAYER Moslenick SESSION START AT 02/28/17 18:20:26/!!/", -- [1]
+	"|asdas|asdasdasd|WoWScrnShot_022817_182026.jpg|02/28/17 18:20:26|Moslenick|Dalaran|Deathknell|Deathknell|", -- [2]
+	"/??/PLAYER Moslenick SESSION ENDED AT 02/28/17 18:20:31/??/", -- [3]
+
+}
+UISettings = {
+	["Y_res"] = 250,
+	["X_res"] = 500,
+	["ss_action"] = 2,
+	["dump_chats"] = 1,
 }
