@@ -7,11 +7,11 @@ public class FileConfig
 {
 	public static Properties fileConfig = new Properties();
 	
-	public void saveFileInfo(String value)
+	public void saveFileInfo(String value, String name)
 	{
 		try
 		{
-			fileConfig.setProperty("File", value);
+			fileConfig.setProperty(name, value);
 			fileConfig.store(new FileOutputStream("fileConfig.prop"), null);
 		}
 		catch(IOException e)
@@ -20,13 +20,13 @@ public class FileConfig
 		}
 	}
 	
-	public String getFileInfo()
+	public String getFileInfo(String name)
 	{
 		String value = "";
 		try
 		{
 			fileConfig.load(new FileInputStream("fileConfig.prop"));
-			value = fileConfig.getProperty("File");
+			value = fileConfig.getProperty(name);
 		}
 		catch(IOException e)
 		{

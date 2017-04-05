@@ -28,96 +28,71 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.commons.io.FileUtils;
 
 
-
-
-
 public class LoginPage extends JPanel implements ActionListener{
 
-	MainFrame mFrame;
+    MainFrame mFrame;
 	
 	private static final String LOGIN_URL = "http://localhost:3000/api/users/authenticate";
 	private static final String USER_AGENT = "Mozilla/5.0";
-                      
+	
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     public LoginPage(MainFrame mf) {
 		
 		mFrame = mf;
-		
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        lblUser = new javax.swing.JLabel();
+        lblPass = new javax.swing.JLabel();
+        txtUser = new javax.swing.JTextField();
+        txtPass = new javax.swing.JTextField();
+        btnCancel = new javax.swing.JButton();
+        btnOK = new javax.swing.JButton();
 
-        jLabel1.setText("Username:");
+        setLayout(null);
 
-        jLabel2.setText("Password:");
+        lblUser.setText("Username:");
+        add(lblUser);
+        lblUser.setBounds(270, 150, 100, 30);
 
-        jButton1.setText("Cancel");
-		jButton1.addActionListener(this);
+        lblPass.setText("Password:");
+        add(lblPass);
+        lblPass.setBounds(270, 190, 80, 30);
 
-        jButton2.setText("OK");
-		jButton2.addActionListener(this);
+        add(txtUser);
+        txtUser.setBounds(370, 150, 210, 20);
+        add(txtPass);
+        txtPass.setBounds(370, 190, 210, 20);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2)))
-                .addContainerGap(199, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addContainerGap(205, Short.MAX_VALUE))
-        );
-    }// </editor-fold>                                                                 
+        btnCancel.setText("Cancel");
+		btnCancel.addActionListener(this);
+        add(btnCancel);
+        btnCancel.setBounds(280, 250, 110, 30);
+
+        btnOK.setText("OK");
+		btnOK.addActionListener(this);
+        add(btnOK);
+        btnOK.setBounds(460, 250, 90, 30);
+    }// </editor-fold>                        
+                                      
 
 
     // Variables declaration - do not modify                     
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    // End of variables declaration   
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnOK;
+    private javax.swing.JLabel lblPass;
+    private javax.swing.JLabel lblUser;
+    private javax.swing.JTextField txtPass;
+    private javax.swing.JTextField txtUser;
+    // End of variables declaration  
 
 	public void actionPerformed(ActionEvent e){
 		
 		Object src=e.getSource();
 		//upload button
-        if(src.equals(jButton2)){
+        if(src.equals(btnOK)){
 			
-			String s1 = jTextField1.getText(); //get from textfield1 (username)
-			String s2 = jTextField2.getText(); //get from textfield2 (password)
+			String s1 = txtUser.getText(); //get from textfield1 (username)
+			String s2 = txtPass.getText(); //get from textfield2 (password)
 		
 			// This is where the user auth token will be (Using a static one for now -- linked to a test account)
 			//httpPost.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");

@@ -73,7 +73,7 @@ public class MainFrame extends JFrame{
     public MainFrame() {
         super("SUPER AWESOME WOW APP");
         setResizable(false);
-        setSize(400, 400);
+        setSize(820, 430);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         p.setLayout(c);
         p.add(menu, "mPage");
@@ -113,7 +113,23 @@ public class MainFrame extends JFrame{
     //    
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
 			String directory = chooser.getSelectedFile().getAbsolutePath();
-			fCon.saveFileInfo(directory);
+			fCon.saveFileInfo(directory, "File");
+		}
+	}
+	
+	public void findScreenshotDir(){
+		JFileChooser chooser = new JFileChooser(); 
+		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setDialogTitle("Please select folder for screenshots");
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    //
+    // disable the "All files" option.
+    //
+		chooser.setAcceptAllFileFilterUsed(false);
+    //    
+		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+			String directory = chooser.getSelectedFile().getAbsolutePath();
+			fCon.saveFileInfo(directory, "Scrnshts");
 		}
 	}
 	//*/
@@ -122,7 +138,7 @@ public class MainFrame extends JFrame{
     //Function connects to database and attempts to send data to it
 	//*
 	public void startSEND(){
-		String directory = fCon.getFileInfo();
+		String directory = fCon.getFileInfo("File");
 		File file1 = new File(directory + "\\WTF\\Account\\");
 		if (file1.exists() && file1.isDirectory()){
 			sendPOST();
