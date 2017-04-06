@@ -24,6 +24,8 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.*;
 
 ///*
 import org.apache.http.HttpEntity;
@@ -37,6 +39,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.entity.mime.content.FileBody;
+
+import org.json.simple.JSONObject;
 
 import org.apache.commons.io.FileUtils;
 //*/
@@ -307,17 +311,34 @@ public class MainFrame extends JFrame{
 
 						BufferedReader reader = new BufferedReader(new InputStreamReader(
 							httpResponse2.getEntity().getContent()));
-
+						//InputStream instream = httpResponse2.getEntity().getContent();
+						//String result = convertStreamToString(instream);
+						
 						String inputLine;
 						StringBuffer response = new StringBuffer();
+						String result = "";
 
 						while ((inputLine = reader.readLine()) != null) {
-							response.append(inputLine);
+							//response.append(inputLine);
+							result += inputLine;
 						}
 						reader.close();
+						
+						//String result = org.apache.commons.io.IOUtils.toString(response);
+						
+						JsonReader jReader = Json.createReader(new StringReader(result));
+						
+						JSONObject resObject = jReader.readObject();
+						
+						jReader.close();
+						
+						//String uploadPath = resObject.getString("Data.link");
+
+						
 
 						// print result
-						System.out.println(response.toString());
+						//System.out.println(response.toString());
+						System.out.println(resObject.getString("Data.link"));
 
 
 
