@@ -27,29 +27,78 @@
 
 local timestart = format(date("%m/%d/%y %H:%M:%S")) -- Used for initial time stamp for sessions.
 local frame = CreateFrame("Frame") -- Create a frame that can listen to events being sent out by the game
+local chateventframe = CreateFrame("Frame") -- Create a frame that can listen to events being sent out by the game
 local addonname = "SStagger"  --Later used to filter our Addon events from other possible Addons
 
+chatlog = {}
+
+chatevents = {
+"CHAT_MSG_CHANNEL",
+"CHAT_MSG_WHISPER",
+"CHAT_MSG_CHANNEL_NOTICE" 
+,"CHAT_MSG_BATTLEGROUND"
+        ,"CHAT_MSG_BATTLEGROUND_LEADER" 
+        ,"CHAT_MSG_WHISPER" 
+        ,"CHAT_MSG_WHISPER_INFORM" 
+        ,"CHAT_MSG_MONSTER_WHISPER" 
+        ,"CHAT_MSG_RAID" 
+        ,"CHAT_MSG_RAID_LEADER" 
+        ,"CHAT_MSG_RAID_WARNING" 
+        ,"CHAT_MSG_PARTY" 
+        ,"CHAT_MSG_PARTY_LEADER" 
+        ,"CHAT_MSG_SAY" 
+        ,"CHAT_MSG_MONSTER_SAY" 
+        ,"CHAT_MSG_YELL" 
+        ,"CHAT_MSG_MONSTER_YELL" 
+        ,"CHAT_MSG_OFFICER" 
+        ,"CHAT_MSG_GUILD" 
+        ,"CHAT_MSG_EMOTE" 
+        ,"CHAT_MSG_MONSTER_EMOTE" 
+        ,"CHAT_MSG_BN_WHISPER" 
+        ,"CHAT_MSG_BN_WHISPER_INFORM" 
+        ,"CHAT_MSG_ACHIEVEMENT" 
+        ,"CHAT_MSG_GUILD_ACHIEVEMENT" 
+        ,"CHAT_MSG_INSTANCE_CHAT" ,
+"CHAT_MSG_INSTANCE_CHAT_LEADER"
+
+
+
+}
 
 --Let the addon know that we want to listen for the following three events to trigger
 frame:RegisterEvent("ADDON_LOADED") -- Triggers when addon is loaded successfully.
-frame:RegisterEvent("PLAYER_LOGIN");-- On player logout event
-frame:RegisterEvent("PLAYER_LEAVING_WORLD");-- On char logout event
+frame:RegisterEvent("PLAYER_LOGIN")-- On player logout event
+frame:RegisterEvent("PLAYER_LEAVING_WORLD")-- On char logout event
 
-
+    for event,v in pairs(chatevents) do
+	--ChatFrame1:AddMessage(v)
+        frame:RegisterEvent(v)
+    end
+	
 --OnEvent() expects reference to the frame it is referenced from, the name of event, and name of addon are passed upon being called.
 --Called whenever an event triggered 
 --This function is used to determine what event it is as well as how to proceed.
-local function OnEvent(self, event, name)
-
+local function OnEvent(self, event, ...)
+		for list,v in pairs(chatevents) do
+			
+			if event == v then
+				--ChatFrame1:AddMessage(v)
+				HandleMessage(event,...)
+			end
+				
+				
+				
+		end
 	if event == "PLAYER_LEAVING_WORLD" then end_session() 
-		elseif  event == "PLAYER_LOGIN" then ChatFrame1:AddMessage("The player has logged in. Look at the event that triggered ->"..event) --Outputs to ingame chat box
-	end
+
 	
-	if name ~= "SStagger" then return end	--Not our addon's event, so we don't want to do anything about it
+	if ... ~= "SStagger" then return end	--Not our addon's event, so we don't want to do anything about it
 
 	if event == "ADDON_LOADED" then
 			loadSettings()			--Calls initial load functions to prepare the tables and first log file line.	
 			end
+	
+end
 end
 frame:SetScript("OnEvent", OnEvent) --Redirects all events the addon detects to be parsed by above Function. MUST BE PLACED AFTER THE OnEvent FUNCTION
 
@@ -151,6 +200,7 @@ end
 
 
 
+
 function getInput(arg, filename)--Finalizes a database entry by assembling the previously obtained user info, and now waits for the user inputted description and tags
 
 	--The following four variables use functions I wrote for their UI properties. The lua/xml interactions are pretty verbose so the UI elements are in their own functions
@@ -160,18 +210,78 @@ function getInput(arg, filename)--Finalizes a database entry by assembling the p
 	local descr=descrBox() --Description text field where the user enters in information
 	local tags=tagsBox()   --Tags test field where the user enters in relevant tags to the event
 
+	
 
 	--Clicking the button will execute the code following it. Acts as a way to wait for the input to be entered before executing.  
 	button:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") self:GetParent():Hide()
-
-	tinsert(screenshotDB,"|"..descr:GetText().."|"..tags:GetText()..arg.."|")  	--getText is a built in function used to retrieve info from text box. arg is what our userdata + filename string from the previous method
-
+     
+	tinsert(screenshotDB,"|"..descr:GetText().."|"..tags:GetText()..arg.."|" .. getChatLog())  	--getText is a built in function used to retrieve info from text bo--x. arg is what our userdata + filename string from the previous method
 	--tinsert inserted the line into the table, which is now in our log file. It is ready to be interpreted by the User client
 	--Application for our project at this stage. 
 	--It is in the following format: 	|DESCR|TAGS|FILENAME.jpg|MM/DD/YY HH:MM:SS|PLAYERNAME|SERVERNAME|LOCATIONNAME|SUBLOCATIONNAME|
 
-	ChatFrame1:AddMessage("[SStagger]:File "..filename .." saved to drive with logs.") end) --Outputs the screenshot name into the game chat box
+	ChatFrame1:AddMessage("[SStagger]:File "..filename .." saved to drive with logs.") wipeChatLog() end) --Outputs the screenshot name into the game chat box
+	
 end
+-- ============================================================
+-- Chat Log Related Aspects
+--
+-- ============================================================
+function wipeChatLog()
+
+	for i,j in pairs(chatlog) do
+		chatlog [i] = nil
+	end
+end
+
+
+function getChatLog()
+	result = ""
+	for i,j in pairs(chatlog) do
+
+		if j ~= "" then
+		--ChatFrame1:AddMessage(j)
+		result = result ..j.. "\n"
+		end
+	end
+	--ChatFrame1:AddMessage(result)
+	return result
+end
+
+function AddNewMessage(msg)
+--ChatFrame1:AddMessage(msg)
+tinsert(chatlog, msg)
+
+
+
+
+
+
+end
+
+
+
+
+function HandleMessage(event, ...)
+
+ 
+  -- Getting info from event args
+  local message, sender, _, _, _, flags, _, _, channelName, _, _, guid = ...
+--ChatFrame1:AddMessage(message)
+  --ChatFrame1:AddMessage(sender)
+
+     -- Finally, capture the message if it is not nil
+    if message ~= nil then
+	  
+      AddNewMessage(format(date("%m/%d/%y %H:%M:%S")) .. ":["..sender .."]: " .. message)
+
+
+	end
+
+
+end
+
+
 -- ============================================================
 -- Main UI Building (Main Behavior of the Addon)
 --
