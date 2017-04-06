@@ -113,8 +113,8 @@ function loadSettings() --Initial User settings are loaded in function loadSetti
 	local defaults = { -- Table stores the default values for user persistent variables
 						X_res = 500,
 						Y_res = 250,	
-						ss_action = 2,
-						dump_chats = 1}
+						dump_chats = 1,
+						chat_lines = 25}
 
 	local function copyTable(source, output) --copyTable inserts all values from the source table into an output table. This is done in case no options have been set. The defaults table will overwrite the empty src table provided
 
@@ -247,17 +247,42 @@ function getChatLog()
 	--ChatFrame1:AddMessage(result)
 	return result
 end
+ local pop = function (t)
+    local key, value = next(t)
+    if key ~= nil then
+        t[key] = nil
+    end
+    return key, value
+end
 
 function AddNewMessage(msg)
---ChatFrame1:AddMessage(msg)
+
+
+--checks to see if table is full already. then deletes last entry and adds to beginning
+
+--local key, value = pop(chatlog)
+--tremove(chatlog, [UISettings["chat_lines"])
+if (chatlog[UISettings["chat_lines"]]) then
+	tremove(chatlog,1)
+	tinsert(chatlog,UISettings["chat_lines"], msg)
+else
 tinsert(chatlog, msg)
+end
 
 
 
-
+--ChatFrame1:AddMessage("Popped".. value);
+--ChatFrame1:AddMessage("Yeah");
 
 
 end
+
+
+
+
+
+
+
 
 
 
@@ -502,7 +527,10 @@ function settingsmenu(parentpointer)
 	  
 	 UIDropDownMenu_SetWidth(dropdown1, 100);
 	 UIDropDownMenu_SetButtonWidth(dropdown1, 124)
-	 UIDropDownMenu_SetSelectedID(dropdown1, 1)
+	 
+	 
+	 
+	 UIDropDownMenu_SetSelectedID(dropdown1, ((UISettings["X_res"] - 400 ) / 100 ))
 	 UIDropDownMenu_JustifyText(dropdown1, "LEFT")
 	dropdown1:SetPoint("BOTTOMLEFT", 130, 85) 
 
@@ -523,15 +551,18 @@ function settingsmenu(parentpointer)
 
 	  local function OnClick2(self2)
 	   UIDropDownMenu_SetSelectedID(dropdown2, self2:GetID())
-	   ChatFrame1:AddMessage("dropdown 2 value: ".. self2:GetID())
-	   UISettings["ss_action"] = self2:GetID()
+	   --ChatFrame1:AddMessage("dropdown 2 value: ".. self2:GetID())
+	   UISettings["chat_lines"] = (self2:GetID() -1) * 25
 	 end
 	  local function initialize2(self2, level2)
 	   local info2 = UIDropDownMenu_CreateInfo()
 
 	  local action_choice = {
-	   "On Tag Screenshot press",
-	   "On Hotkey Press",
+	    "Disable Chatlog Dump",
+	   "Last 25 lines",
+	   "Last 50 lines",
+	   "Last 75 lines",
+	   "Last 100 lines"
 	 }
 	   for j,l in pairs(action_choice) do
 		 info2 = UIDropDownMenu_CreateInfo()
@@ -545,7 +576,7 @@ function settingsmenu(parentpointer)
 	 UIDropDownMenu_Initialize(dropdown2, initialize2)
 	 UIDropDownMenu_SetWidth(dropdown2, 150);
 	 UIDropDownMenu_SetButtonWidth(dropdown2, 124)
-	 UIDropDownMenu_SetSelectedID(dropdown2, 1)
+	 UIDropDownMenu_SetSelectedID(dropdown2,1+(UISettings["chat_lines"]  /25) )
 	 UIDropDownMenu_JustifyText(dropdown2, "LEFT")
 	 UIDROPDOWNMENU_SHOW_TIME = .1
 	dropdown2:SetPoint("BOTTOMLEFT", 130, 55) 
@@ -565,7 +596,7 @@ function settingsmenu(parentpointer)
 
 	stng.text2 = stng.text2 or stng:CreateFontString(nil,"ARTWORK","QuestFont")
 	stng.text2:SetTextColor(1,1,1,1)
-	stng.text2:SetText(format("Screen Capture Behavior:"))
+	stng.text2:SetText(format("Chatlog Dump Settings:"))
 	stng.text2:SetPoint("BOTTOMLEFT", 30, 70)
 	stng.text2:SetFont("Fonts\\FRIZQT__.TTF", 8)
 	stng.text2:SetFontObject("ChatFontNormal")
