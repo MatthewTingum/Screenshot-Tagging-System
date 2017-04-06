@@ -5,7 +5,38 @@ import java.awt.Image;
 import java.awt.Color;
 
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.json.JsonObject;
+import javax.json.JsonArray;
+import javax.json.JsonReader;
+import javax.json.Json;
+
+import java.io.StringReader;
+
+
 public class SearchScreen extends JPanel implements ActionListener{
+	
+	// The sauce
+	private static final String GET_URL = "http://localhost:3000/api/submissions/submission";
+	private static final String USER_AGENT = "Mozilla/5.0";
 
     MainFrame mFrame;
 	
@@ -19,10 +50,73 @@ public class SearchScreen extends JPanel implements ActionListener{
 		
 		CellDataEntry c;
 		DefaultListModel<CellDataEntry> listModel = new DefaultListModel<>();
-		for (int i = 0; i<19; i++){
-			c = new CellDataEntry("420BlazeIt", "This describes the picture " + i, "https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg");
+		
+		/*
+		for (int i = 0; i<3; i++){
+			c = new CellDataEntry("WowTag", "This describes the picture " + i, "http://www.icxm.net/team/uploads/0-Media/WoWScrnShot_010213_205208.jpg");
 			listModel.addElement(c);
 		}
+		*/
+		
+		/////// BEGIN SAUCE /////////////////////////////////////////////////////////////
+		
+		try{
+				CloseableHttpClient httpClient = HttpClients.createDefault();
+				HttpGet request = new HttpGet(GET_URL);
+				request.addHeader("User-Agent", USER_AGENT);
+				
+				// This is not the sauce. Make it sauce.
+				request.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
+				
+				HttpResponse response = httpClient.execute(request);
+				
+				System.out.println("\nSending 'GET' request to URL : " + GET_URL);
+				System.out.println("Response Code : " +
+                response.getStatusLine().getStatusCode());
+				
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent()));
+
+				String inputLine;
+				StringBuffer responseSB = new StringBuffer();
+
+				while ((inputLine = reader.readLine()) != null) {
+					responseSB.append(inputLine);
+				}
+				reader.close();
+				
+				// print result
+				//System.out.println(responseSB.toString());
+				
+				// This is because I'm lazy
+				String x = responseSB.toString();
+				x = "{ \"data\":" + x.substring(0, x.length()) + "}";
+				
+				System.out.println(x);
+				
+				JsonReader rdr = Json.createReader(new StringReader(x));
+				//JsonReader rdr = Json.createReader(new StringReader("{\"data\" : [{ \"from\" : { \"name\" : \"xxx\"}, \"message\" : \"yyy\"},{ \"from\" : { \"name\" : \"ppp\"}, \"message\" : \"qqq\"}]}"));
+				
+				JsonObject obj = rdr.readObject();
+				JsonArray results = obj.getJsonArray("data");
+				
+				for (JsonObject result : results.getValuesAs(JsonObject.class)) {
+					System.out.println("-----------");
+					System.out.println(result.getString("Description", ""));
+					
+					c = new CellDataEntry("WowTag", result.getString("Description", ""), "http://www.icxm.net/team/uploads/0-Media/WoWScrnShot_010213_205208.jpg");
+					listModel.addElement(c);
+				}
+					   
+				httpClient.close();
+			}catch (Exception err){
+				System.out.println("Error");
+				//err.printStackTrace();
+			}
+		
+		
+		// THING: result.getString("ImagePath", "")
+		////// END SAUCE ////////////////////////////////////////////////////////////////
 	
 		dataList = new JList<>(listModel);
 		
