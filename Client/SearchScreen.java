@@ -3,6 +3,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Image;
 import java.awt.Color;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.io.*;
 
 
 import org.apache.http.HttpResponse;
@@ -41,15 +45,15 @@ public class SearchScreen extends JPanel implements ActionListener{
     MainFrame mFrame;
 	
 	private JList<CellDataEntry> dataList;
+	DefaultListModel<CellDataEntry> listModel;
 
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     public SearchScreen(MainFrame mf){
 
 		mFrame = mf;
 		
-		CellDataEntry c;
-		DefaultListModel<CellDataEntry> listModel = new DefaultListModel<>();
+		listModel = new DefaultListModel<>();
 		
 		/*
 		for (int i = 0; i<3; i++){
@@ -58,7 +62,7 @@ public class SearchScreen extends JPanel implements ActionListener{
 		}
 		*/
 		
-		/////// BEGIN SAUCE /////////////////////////////////////////////////////////////
+		/*////// BEGIN SAUCE /////////////////////////////////////////////////////////////
 		
 		try{
 				CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -104,7 +108,9 @@ public class SearchScreen extends JPanel implements ActionListener{
 					System.out.println("-----------");
 					System.out.println(result.getString("Description", ""));
 					
-					c = new CellDataEntry("WowTag", result.getString("Description", ""), "http://www.icxm.net/team/uploads/0-Media/WoWScrnShot_010213_205208.jpg");
+					//c = new CellDataEntry("WowTag", result.getString("Description", ""), "http://www.icxm.net/team/uploads/0-Media/WoWScrnShot_010213_205208.jpg");
+					c = new CellDataEntry("WowTag", result.getString("Description", ""), "C:/Users/kirby/Desktop/CSCI493/github/Screenshot-Tagging-System/Server/app/" + result.getString("ImagePath", ""));
+					System.out.println(result.getString("ImagePath", "") + " LOOOOOOOK @ MEEEEEEEEEEEEE");
 					listModel.addElement(c);
 				}
 					   
@@ -116,7 +122,7 @@ public class SearchScreen extends JPanel implements ActionListener{
 		
 		
 		// THING: result.getString("ImagePath", "")
-		////// END SAUCE ////////////////////////////////////////////////////////////////
+		///*/// END SAUCE ////////////////////////////////////////////////////////////////
 	
 		dataList = new JList<>(listModel);
 		
@@ -143,11 +149,11 @@ public class SearchScreen extends JPanel implements ActionListener{
 		
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(180, 10, 610, 380);
+        jScrollPane1.setBounds(180, 10, 900, 540);
         add(jTextField1);
         jTextField1.setBounds(10, 30, 150, 20);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Tags", "Description"}));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Tags", "Description", "Character", "Location"}));
         add(jComboBox1);
         jComboBox1.setBounds(10, 100, 150, 20);
 
@@ -166,7 +172,7 @@ public class SearchScreen extends JPanel implements ActionListener{
 
         jButton2.setText("Back");
         add(jButton2);
-        jButton2.setBounds(10, 360, 130, 23);
+        jButton2.setBounds(10, 540, 130, 23);
 		jButton2.addActionListener(this);
 		
 		//test();
@@ -188,11 +194,124 @@ public class SearchScreen extends JPanel implements ActionListener{
 		Object src=e.getSource();
 		//upload button
         if(src.equals(jButton1)) {
-			
+			searchData();
 		}
 		else 
 			mFrame.showMain();
     }
+	
+	public void searchData(){
+		listModel.removeAllElements();
+		CellDataEntry c;
+		String category = jComboBox1.getSelectedItem().toString();
+		System.out.println("HERE\n\n\n"+ category + "\n\n\n");
+		String keyword = jTextField1.getText();
+		try{
+				CloseableHttpClient httpClient = HttpClients.createDefault();
+				HttpGet request = new HttpGet(GET_URL);
+				request.addHeader("User-Agent", USER_AGENT);
+				
+				// This is not the sauce. Make it sauce.
+				//request.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
+				
+				//Use new methods //////////////////////////////////////////////////////////
+				request.addHeader("Authorization", mFrame.getToken());
+				//System.out.println("a");
+				
+				HttpResponse response = httpClient.execute(request);
+				
+				System.out.println("\nSending 'GET' request to URL : " + GET_URL);
+				System.out.println("Response Code : " +
+                response.getStatusLine().getStatusCode());
+				
+				
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent()));
+				
+
+				String inputLine;
+				StringBuffer responseSB = new StringBuffer();
+
+				while ((inputLine = reader.readLine()) != null) {
+					responseSB.append(inputLine);
+				}
+				reader.close();
+				//System.out.println("c");
+				
+				// print result
+				//System.out.println(responseSB.toString());
+				
+				// This is because I'm lazy
+				String x = responseSB.toString();
+				x = "{ \"data\":" + x.substring(0, x.length()) + "}";
+				
+				//System.out.println(x);
+				//System.out.println("d");
+				
+				JsonReader rdr = Json.createReader(new StringReader(x));
+				//JsonReader rdr = Json.createReader(new StringReader("{\"data\" : [{ \"from\" : { \"name\" : \"xxx\"}, \"message\" : \"yyy\"},{ \"from\" : { \"name\" : \"ppp\"}, \"message\" : \"qqq\"}]}"));
+				
+				//System.out.println("b");
+				JsonObject obj = rdr.readObject();
+				//System.out.println("b");
+				JsonArray results = obj.getJsonArray("data");
+				for (JsonObject result : results.getValuesAs(JsonObject.class)) {
+					
+					System.out.println("-----------");
+					System.out.println(result.getString("Description", ""));
+					
+					File imageFileStart = new File("../Server/app");
+					//c = new CellDataEntry("WowTag", result.getString("Description", ""), "http://www.icxm.net/team/uploads/0-Media/WoWScrnShot_010213_205208.jpg");
+					c = new CellDataEntry(result.getString("Tags", ""), result.getString("Description", ""), 
+											result.getString("Character", ""), result.getString("Location", ""), 
+											imageFileStart.getAbsolutePath()+ "/" + result.getString("ImagePath", ""));
+					//System.out.println(result.getString("ImagePath", "") + " LOOOOOOOK @ MEEEEEEEEEEEEE");
+					if (category.equals("All")){
+						if (searchAll(keyword, result.getString("Description", ""), result.getString("Tags", ""), result.getString("Character", ""), result.getString("Location", "")))
+							listModel.addElement(c);
+					}
+					else{
+						if (matchSearch(keyword, result.getString(category, "")))
+							listModel.addElement(c);
+					}
+				}
+					   
+					   //System.out.println("e");
+				httpClient.close();
+			}catch (Exception err){
+				System.out.println("Error");
+				//err.printStackTrace();
+			}
+	}
+	
+	public boolean matchSearch(String keyword, String sample){
+		if (keyword.isEmpty())
+			return true;
+		Pattern pattern = Pattern.compile(keyword.toLowerCase());
+		Matcher match = pattern.matcher(sample.toLowerCase());
+		if (match.find())
+			return true;
+		return false;
+	}
+	
+	public boolean searchAll(String keyword, String descript, String tagg, String charact, String locate){
+		if (keyword.isEmpty())
+			return true;
+		Pattern pattern = Pattern.compile(keyword.toLowerCase());
+		Matcher m1 = pattern.matcher(descript.toLowerCase());
+		Matcher m2 = pattern.matcher(tagg.toLowerCase());
+		Matcher m3 = pattern.matcher(charact.toLowerCase());
+		Matcher m4 = pattern.matcher(locate.toLowerCase());
+		if (m1.find())
+			return true;
+		if (m2.find())
+			return true;
+		if (m3.find())
+			return true;
+		if (m4.find())
+			return true;
+		return false;
+	}
 
 	/*
 	public void test(){

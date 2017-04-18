@@ -1,3 +1,8 @@
+/**
+ *Richard Lee
+ *
+ */
+
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.net.URL;
@@ -9,15 +14,18 @@ public class CellDataEntry {
     private String tag;
     private String desc;
 	private String iconPath;
-	private URL url;
+	private String character;
+	private String location;
 	private ImageIcon image;
 	
  
-    public CellDataEntry(String t, String d, String i) {
+    public CellDataEntry(String t, String d, String c, String l, String i) {
         tag = t;
         desc = d;
 		iconPath = i;
-		makeURL();
+		character = c;
+		location = l;
+		image = new ImageIcon(iconPath);
     }
  
     public String getTag() {
@@ -32,21 +40,15 @@ public class CellDataEntry {
         return desc;
     }
 	
-	public ImageIcon getImage() {
-//if (image == null) {
-			//image = new ImageIcon(iconPath);
-		//}
-		return image;
+	public String getChar(){
+		return character;
 	}
 	
-	public void makeURL(){
-		try{
-			url = new URL(iconPath);
-			Image im = ImageIO.read(url);
-			image = new ImageIcon(im);
-		}
-		catch(IOException e){
-			System.out.println(e);
-		}
+	public String getLoc(){
+		return location;
+	}
+	
+	public ImageIcon getImage() {
+		return image;
 	}
 } 

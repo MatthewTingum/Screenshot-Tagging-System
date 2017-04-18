@@ -30,8 +30,7 @@ public class MainMenu extends JPanel implements ActionListener{
 	//The MainFrame the MainMenu is connected to
     MainFrame mFrame;
 	
-    
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     public MainMenu(MainFrame mf) {
 		
@@ -77,7 +76,7 @@ public class MainMenu extends JPanel implements ActionListener{
         btnExit.setBounds(670, 340, 100, 40);
 
         btnLog.setFont(new java.awt.Font("SansSerif", 2, 14)); // NOI18N
-        btnLog.setText("Log in");
+        btnLog.setText("Log out");
 		btnLog.addActionListener(this);
         add(btnLog);
         btnLog.setBounds(30, 340, 110, 40);
@@ -99,18 +98,6 @@ public class MainMenu extends JPanel implements ActionListener{
     private javax.swing.JButton btnUpload;
     private javax.swing.JLabel lblTitle;
     // End of variables declaration  
-
-	public void setLoginText()
-	{
-		if(mFrame.loggedIN){
-			btnLog.setText("Log out");
-		}
-		else
-		{
-			btnLog.setText("Log in");
-		}
-	}
-    
     
     //This function dictates the actions to occur when a button is pressed in the Main Menu
     public void actionPerformed(ActionEvent e){
@@ -120,15 +107,7 @@ public class MainMenu extends JPanel implements ActionListener{
             // Logic for inerfacing with the API
 			//System.out.println("a thing\n");
 			//mFrame.startSEND();
-			if (mFrame.loggedIN)
-			{
-				mFrame.startSEND();
-			}
-			else
-			{
-				//mFrame.startSEND();
-				JOptionPane.showMessageDialog(null, "Error: Must be logged in to upload data.");
-			}
+			mFrame.startSEND();
 		}		
         //Search button
         if(src.equals(btnSearch)){
@@ -137,42 +116,10 @@ public class MainMenu extends JPanel implements ActionListener{
             mFrame.showSearch();
         }
         //Help button
+		//Make message box have scrollpane for long message ///////////////////////////////////////////////
         if(src.equals(btnHelp)){
-            JOptionPane.showMessageDialog(null, "These are your instructions.  Good Luck!");
-			// Get some things
-			
-			
-			try{
-				CloseableHttpClient httpClient = HttpClients.createDefault();
-				HttpGet httpGet = new HttpGet(SUBS_URL);
-				httpGet.addHeader("User-Agent", USER_AGENT);
-				
-				//HttpEntity postParams = new UrlEncodedFormEntity(urlParameters);
-				//httpPost.setEntity(postParams);
-
-				CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
-
-				//System.out.println("POST Response Status:: "
-				//	+ httpResponse.getStatusLine().getStatusCode());
-
-				BufferedReader reader = new BufferedReader(new InputStreamReader(
-					httpResponse.getEntity().getContent()));
-
-				String inputLine;
-				StringBuffer response = new StringBuffer();
-
-				while ((inputLine = reader.readLine()) != null) {
-					response.append(inputLine);
-				}
-				reader.close();
-				
-				System.out.println(response.toString());
-			}
-			catch (Exception err){
-				System.out.println("Error");
-				System.out.println(err);
-				//err.printStackTrace();
-			}
+            //JOptionPane.showMessageDialog(null, "These are your instructions.  Good Luck!");
+			mFrame.showHelp();
         }
         //Exit button
         if(src.equals(btnExit)){
@@ -180,34 +127,11 @@ public class MainMenu extends JPanel implements ActionListener{
         }
         //Login Button
         if(src.equals(btnLog)){
-			if (mFrame.loggedIN){
-				mFrame.loggedIN = false;
-				mFrame.loginToken = "UA";
-				setLoginText();
-			}
-			else {
-				mFrame.showLog();
-			}
+			mFrame.logOutUser();
         }
         //Config button
         if(src.equals(btnConfig)){
-			Object[] options = {"Screenshots",
-                    "WoW Location",
-                    "Cancel"};
-			int n = JOptionPane.showOptionDialog(null,
-					"Would you like to configure screenshot locations "
-					+ "or World of Warcraft directory location?",
-					"Select what to configure.",
-					JOptionPane.YES_NO_CANCEL_OPTION,
-					JOptionPane.QUESTION_MESSAGE,
-					null,
-					options,
-					options[2]);
-			if (n==1)
-				mFrame.findDirectory();
-			else if (n==0){
-				mFrame.findScreenshotDir();
-			}
+			mFrame.findDirectory();
         }
     }
     	

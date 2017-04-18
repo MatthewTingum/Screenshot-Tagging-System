@@ -22,10 +22,11 @@ public class DataRenderer extends JLabel implements ListCellRenderer<CellDataEnt
         //String code = cellData.getCode();
         //ImageIcon imageIcon = new ImageIcon(getClass().getResource("/images/" + code + ".png"));
 		//ImageIcon imageIcon = new ImageIcon(new ImageIcon("WowEx.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-		ImageIcon imageIcon = new ImageIcon(cellData.getImage().getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+		ImageIcon imageIcon = new ImageIcon(cellData.getImage().getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT));
  
         setIcon(imageIcon);
-        setText("<html>#" + cellData.getTag() + "<br><br>" + cellData.getDesc() + "</html>");
+        setText("<html>Tag: #" + cellData.getTag() + "<br>Description: " + cellData.getDesc()+ "<br>Character: " + cellData.getChar()
+								+ "<br>Location: " + cellData.getLoc() + "</html>");
  
         if (isSelected) {
             setBackground(list.getSelectionBackground());

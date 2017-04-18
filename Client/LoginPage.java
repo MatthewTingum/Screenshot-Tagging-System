@@ -35,7 +35,7 @@ public class LoginPage extends JPanel implements ActionListener{
 	private static final String LOGIN_URL = "http://localhost:3000/api/users/authenticate";
 	private static final String USER_AGENT = "Mozilla/5.0";
 	
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     public LoginPage(MainFrame mf) {
 		
@@ -44,7 +44,8 @@ public class LoginPage extends JPanel implements ActionListener{
         lblUser = new javax.swing.JLabel();
         lblPass = new javax.swing.JLabel();
         txtUser = new javax.swing.JTextField();
-        txtPass = new javax.swing.JTextField();
+        //txtPass = new javax.swing.JTextField();
+		txtPass = new JPasswordField();
         btnCancel = new javax.swing.JButton();
         btnOK = new javax.swing.JButton();
 
@@ -63,15 +64,15 @@ public class LoginPage extends JPanel implements ActionListener{
         add(txtPass);
         txtPass.setBounds(370, 190, 210, 20);
 
-        btnCancel.setText("Cancel");
+        btnCancel.setText("Exit");
 		btnCancel.addActionListener(this);
         add(btnCancel);
-        btnCancel.setBounds(280, 250, 110, 30);
+        btnCancel.setBounds(460, 250, 90, 30);
 
-        btnOK.setText("OK");
+        btnOK.setText("Ok");
 		btnOK.addActionListener(this);
         add(btnOK);
-        btnOK.setBounds(460, 250, 90, 30);
+        btnOK.setBounds(280, 250, 110, 30);
     }// </editor-fold>                        
                                       
 
@@ -81,7 +82,8 @@ public class LoginPage extends JPanel implements ActionListener{
     private javax.swing.JButton btnOK;
     private javax.swing.JLabel lblPass;
     private javax.swing.JLabel lblUser;
-    private javax.swing.JTextField txtPass;
+    //private javax.swing.JTextField txtPass;
+	private JPasswordField txtPass;
     private javax.swing.JTextField txtUser;
     // End of variables declaration  
 
@@ -92,7 +94,8 @@ public class LoginPage extends JPanel implements ActionListener{
         if(src.equals(btnOK)){
 			
 			String s1 = txtUser.getText(); //get from textfield1 (username)
-			String s2 = txtPass.getText(); //get from textfield2 (password)
+			String s2 = new String(txtPass.getPassword()); //get from textfield2 (password)
+			//System.out.println(s2);
 		
 			// This is where the user auth token will be (Using a static one for now -- linked to a test account)
 			//httpPost.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
@@ -134,22 +137,22 @@ public class LoginPage extends JPanel implements ActionListener{
 				else
 				{
 					String[] splitData = response.toString().split("\"");
-					System.out.println(splitData[3]);	// Token
+					//System.out.println(splitData[3]);	// Token
 					String myToken = splitData[3];
-					mFrame.loginToken = "Bearer " + myToken;
-					mFrame.loggedIN = true;
-					System.out.println(mFrame.loginToken);
-					mFrame.showMain();
+					mFrame.logInUser("Bearer " + myToken);
+					//mFrame.showMain();
 				}
 				httpClient.close();
 			}catch (Exception err){
 				System.out.println("Error");
 				//err.printStackTrace();
 			}
+			txtUser.setText("");
+			txtPass.setText("");
 			
 		}
 		else {
-			mFrame.showMain();
+			System.exit(0);
 		}
 	}
 }

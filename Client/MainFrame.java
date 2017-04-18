@@ -48,6 +48,7 @@ public class MainFrame extends JFrame{
     MainMenu menu = new MainMenu(this);
     SearchScreen search = new SearchScreen(this);
     LoginPage logPage = new LoginPage(this);
+	HelpPage helpPage = new HelpPage(this);
 	
     //Variables for purpose of connecting to database declared here
 	private static final String USER_AGENT = "Mozilla/5.0";
@@ -77,25 +78,34 @@ public class MainFrame extends JFrame{
         p.add(menu, "mPage");
         p.add(search, "sPage");
         p.add(logPage, "lPage");
-        c.show(p, "mPage");
+		p.add(helpPage, "hPage");
+        c.show(p, "lPage");
         add(p);
         setVisible(true);
     }
     
     //This function activates when a button is pushed that should take you to the Main Menu
     public void showMain() {
+		setSize(820, 430);
         c.show(p, "mPage");
-		menu.setLoginText();
+		//menu.setLoginText();
     }
     
     //This function activates when a button is pushed that should take you to the Search Page
     public void showSearch() {
+		//setBounds(0, 0, 0, 0);
+		setSize(1100, 600);
         c.show(p, "sPage");
     }
 	
 	//This function activates when a button is pushed that should take you to the Login Page
 	public void showLog() {
+		//setSize(820, 430);
 		c.show(p, "lPage");
+	}
+	
+	public void showHelp() {
+		c.show(p, "hPage");
 	}
 	
 	//*
@@ -139,14 +149,14 @@ public class MainFrame extends JFrame{
 		String directory = fCon.getFileInfo("File");
 		File file1 = new File(directory + "\\WTF\\Account\\");
 		if (file1.exists() && file1.isDirectory()){
-			sendPOST();
 			System.out.println("Found in configs\n" + file1.getAbsolutePath());
+			sendPOST(file1.getAbsolutePath());
 		}
 		else {
 			File file2 = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\");
 			if (file2.exists() && file2.isDirectory()) {
-				sendPOST();
 				System.out.println("Found as default");
+				sendPOST(file2.getAbsolutePath());
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Error: The directory for World of Warcraft was not found.  Please\n"+
@@ -156,14 +166,29 @@ public class MainFrame extends JFrame{
 		
 	}
 	//*/
-	public void sendPOST(){
+	public void sendPOST(String fileString){
 		///*
-		
+		System.out.println(fileString);
 		// Find and open a log file
-		File file = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\");
+		//File file = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\");
+		File file = new File(fileString);
+		if (!file.exists()){
+			System.out.println("File 1 doesn't exist");
+			return;
+		}
 		String[] account = file.list();
 		
-		File file2 = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\" + account[0] + "\\SavedVariables\\SStagger.lua");
+		//File file2 = new File("C:\\Program Files (x86)\\World of Warcraft\\WTF\\Account\\" + account[0] + "\\SavedVariables\\SStagger.lua");
+		File file2 = new File(fileString + "\\" + account[0] + "\\SavedVariables\\SStagger.lua");
+		System.out.println("File 2 Path: " + file2.getAbsolutePath());
+		if (!file2.exists()){
+			System.out.println("File 2 doesn't exist");
+			return;
+		}
+		else{
+			System.out.println("All is well");
+			//return;
+		}
 		BufferedReader reader2 = null;
 		List<String> list = new ArrayList<String>();
 		
@@ -257,7 +282,8 @@ public class MainFrame extends JFrame{
 		
 		// Copy all images to server
 		File source = new File("C:\\Program Files (x86)\\World of Warcraft\\Screenshots");
-		File dest = new File("C:\\Matt\\School\\Senioritus\\the one thing\\app\\app-content\\images");
+		//File dest = new File("C:\\Matt\\School\\Senioritus\\the one thing\\app\\app-content\\images");
+		File dest = new File("../Server/app/app-content/images");
 		//File dest = new File("C:\\Users\\kirby\\Desktop\\CSCI493\\github\\Screenshot-Tagging-System\\Server\\app\\app-content");
 		/*
 		// Upload images to imgur through the api
@@ -287,6 +313,23 @@ public class MainFrame extends JFrame{
 		// Clear log file
 		file2.delete();
 		//*/
+	}
+	
+	public void logInUser(String token){
+		loginToken = token;
+		loggedIN = true;
+		showMain();
+		//System.out.println("Logging in");
+	}
+	
+	public void logOutUser(){
+		loginToken = "UA";
+		loggedIN = false;
+		showLog();
+	}
+	
+	public String getToken(){
+		return loginToken;
 	}
 	
 }
