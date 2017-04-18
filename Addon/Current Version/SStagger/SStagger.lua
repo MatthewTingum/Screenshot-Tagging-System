@@ -107,6 +107,8 @@ frame:SetScript("OnEvent", OnEvent) --Redirects all events the addon detects to 
 -- Creates global table used for outputting log files and creates the initial login timestamp in log file
 -- ============================================================
 screenshotDB = screenshotDB or {} --Loads, or if not found, creates a new table for the lines of data to be outputted. 
+UISettings = UISettings or {}
+
 function loadSettings() --Initial User settings are loaded in function loadSettings()
 
 	
@@ -123,6 +125,7 @@ function loadSettings() --Initial User settings are loaded in function loadSetti
 				-- Loop through the source table and we will place the values into the received output table
 				for i, j in pairs(source) do
 					output[i] = j	
+					--tinsert(screenshotDB,i .. " = " .. j)
 					
 				end
 			
@@ -133,12 +136,14 @@ function loadSettings() --Initial User settings are loaded in function loadSetti
 				ChatFrame1:AddMessage("[SStagger]:Logged session start at "..timestart)
 				tinsert(screenshotDB, "/!!/PLAYER "..UnitName("player").." SESSION START AT ".. timestart.."/!!/") --Logs string data into the table screenshotDB with the function tinsert()
 	end
-			
-	UISettings = UISettings or {} -- Reuses the existing UISettings table if present. If not an empty table is made for the settings. This is stored in the LUA log file
+		
+		
+	 -- Reuses the existing UISettings table if present. If not an empty table is made for the settings. This is stored in the LUA log file
 	firstTimestamp()	      -- Calls function to place first timestamp
-
+	UISettings = UISettings or {}
 	if next(UISettings) == nil then --In the case where the UISettings table is empty, we are going to place default values into it.
 		UISettings = copyTable(defaults, UISettings)
+		--UISettings = defaults
 	end
 
 end
@@ -164,7 +169,7 @@ end
 -- ============================================================
 
 function hotkey_press() --Called whenever the hotkey is pressed from within the game
-
+	loadSettings()
 	local userinfo = ""
 
 	--Use Game's provided functions to get relevant player information for log file.
@@ -175,10 +180,7 @@ function hotkey_press() --Called whenever the hotkey is pressed from within the 
 	local timevar = format(date()) --Time variable which will be used to create a filename format that is identical to the default naming mechanism that the game uses in the Screenshot() Function
 
 
-	Screenshot()--built in function to take a SS and send it to the Wow/Screenshots directory. We need to associate our log file with this screenshot
-	--Game creates screenshots with a predictable naming template WoWScrnShot_DATE_TIME.jpg
-	--It exists in a specific directory distint from our output log file, so we need to make our log identical
-	--As easy as possible to associate the screenshot with all the user information
+	
 
 
 	--We need to mimic the screenshot outputted by the Screenshot() function. We will build
@@ -220,6 +222,14 @@ function getInput(arg, filename)--Finalizes a database entry by assembling the p
 	--Application for our project at this stage. 
 	--It is in the following format: 	|DESCR|TAGS|FILENAME.jpg|MM/DD/YY HH:MM:SS|PLAYERNAME|SERVERNAME|LOCATIONNAME|SUBLOCATIONNAME|
 
+	
+	
+	Screenshot()--built in function to take a SS and send it to the Wow/Screenshots directory. We need to associate our log file with this screenshot
+	--Game creates screenshots with a predictable naming template WoWScrnShot_DATE_TIME.jpg
+	--It exists in a specific directory distint from our output log file, so we need to make our log identical
+	--As easy as possible to associate the screenshot with all the user information
+	
+	
 	ChatFrame1:AddMessage("[SStagger]:File "..filename .." saved to drive with logs.") wipeChatLog() end) --Outputs the screenshot name into the game chat box
 	
 end
