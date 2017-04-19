@@ -233,7 +233,7 @@ public class MainFrame extends JFrame{
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		
 			// Here is where we can add in any data to send to the database
-<<<<<<< HEAD
+
 			//urlParameters.add(new BasicNameValuePair("Title", "Troll gets rekt m8"));
 			
 			System.out.println(splitData.length);
@@ -243,23 +243,20 @@ public class MainFrame extends JFrame{
 				
 			}
 			
-=======
->>>>>>> origin/master
+
 			urlParameters.add(new BasicNameValuePair("Description", splitData[1]));
 			urlParameters.add(new BasicNameValuePair("Tags", splitData[2]));
 			urlParameters.add(new BasicNameValuePair("Time", splitData[4]));	
 			urlParameters.add(new BasicNameValuePair("ImagePath", "app-content/images/" + scNames[i - 3]));
 			urlParameters.add(new BasicNameValuePair("Character", splitData[5]));
 			urlParameters.add(new BasicNameValuePair("Location", splitData[7]));
-<<<<<<< HEAD
+
 			
 			urlParameters.add(new BasicNameValuePair("Chat", splitData[9]));
 
 			//urlParameters.add(new BasicNameValuePair("SubLocation", splitData[7]));	// This is problematic due to the way the addon delimits
 
-=======
-		
->>>>>>> origin/master
+
 			try{
 				HttpEntity postParams = new UrlEncodedFormEntity(urlParameters);
 				httpPost.setEntity(postParams);
