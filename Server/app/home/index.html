@@ -80,11 +80,18 @@
 		<b>Character: </b>{{vm.loadedSub.Character}}
 		<br>
 		<b>Location: </b>{{vm.loadedSub.Location}}
+		<br>
+		<b>Chat: </b>
+		<div class="list" ng-repeat="thing in vm.loadedSub.ChatSplit">
+				{{ thing }}
+		</div>
 		</center>
 
 
 		<a id="" href="" ng-click="vm.showResults = !vm.showResults; vm.showSort = !vm.showSort; vm.showEditBtn = false">Back</a>
 	</div>
+	
+	
 	
 	<div ng-show="vm.showEditBtn">
 	
@@ -102,6 +109,11 @@
 			<b>Character: </b>{{vm.loadedSub.Character}}
 			<br>
 			<b>Location: </b>{{vm.loadedSub.Location}}
+			<br>
+			<b>Chat: </b>
+			<div class="list" ng-repeat="thing in vm.loadedSub.ChatSplit">
+				{{ thing }}
+			</div>
 			</center>
 
 
@@ -130,6 +142,9 @@
 					<br>
 					<b>Location: </b>
 					<input type="text" name="location" value={{vm.loadedSub.Location}} ng-model="vm.loadedSub.Location">
+					<br>
+					<b>Chat: </b>
+					<input type="text" name="chat" value={{vm.loadedSub.Chat}} ng-model="vm.loadedSub.Chat">
 					<br>
 
 				</form> 

@@ -221,7 +221,7 @@ public class MainFrame extends JFrame{
 		int i = 3;
 		String temp;
 		
-		while (i < list.size() - 1){
+		while (i < list.size() - 7){
 			
 			//System.out.println(list.get(i));
 			temp = list.get(i);
@@ -241,6 +241,14 @@ public class MainFrame extends JFrame{
 		
 			// Here is where we can add in any data to send to the database
 			//urlParameters.add(new BasicNameValuePair("Title", "Troll gets rekt m8"));
+			
+			System.out.println(splitData.length);
+			for (int z = 0; z < splitData.length; z++){
+				
+				System.out.println(splitData[z]);
+				
+			}
+			
 			urlParameters.add(new BasicNameValuePair("Description", splitData[1]));
 			urlParameters.add(new BasicNameValuePair("Tags", splitData[2]));
 			urlParameters.add(new BasicNameValuePair("Time", splitData[4]));		// Date/Time format still needs to be figured out
@@ -248,6 +256,9 @@ public class MainFrame extends JFrame{
 			urlParameters.add(new BasicNameValuePair("Character", splitData[5]));
 			//urlParameters.add(new BasicNameValuePair("Server", splitData[5]));	// The server doesn't like chinese chars
 			urlParameters.add(new BasicNameValuePair("Location", splitData[7]));
+			
+			urlParameters.add(new BasicNameValuePair("Chat", splitData[9]));
+
 			//urlParameters.add(new BasicNameValuePair("SubLocation", splitData[7]));	// This is problematic due to the way the addon delimits
 
 			try{

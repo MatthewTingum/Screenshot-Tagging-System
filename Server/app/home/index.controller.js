@@ -154,6 +154,14 @@
 			SubmissionService.LoadSub(vm.curSub)
                 .then(function (loadedSub) {
 					vm.loadedSub = loadedSub;
+					
+					// ng-bind-html doesn't want to play nice so do this instead
+					vm.loadedSub.ChatSplit = vm.loadedSub.Chat.split("\\n");
+					
+					
+					
+					
+					
                     //FlashService.Success('Submission Loaded');
 					//console.log("It worked fam");
                 })
