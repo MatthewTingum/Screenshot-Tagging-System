@@ -27,6 +27,12 @@ import org.apache.http.message.BasicNameValuePair;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * The LoginPage class creates a JPanel that allows the user to 
+ * enter login information and log in
+ * @author Richard Lee
+ * @version 2.0
+ */ 
 
 public class LoginPage extends JPanel implements ActionListener{
 
@@ -35,8 +41,10 @@ public class LoginPage extends JPanel implements ActionListener{
 	private static final String LOGIN_URL = "http://localhost:3000/api/users/authenticate";
 	private static final String USER_AGENT = "Mozilla/5.0";
 	
-    //@SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    /**
+	 * The constructor creates and returns an instance of LoginPage
+	 * @param mf the MainFrame of the GUI
+	 */
     public LoginPage(MainFrame mf) {
 		
 		mFrame = mf;
@@ -44,7 +52,6 @@ public class LoginPage extends JPanel implements ActionListener{
         lblUser = new javax.swing.JLabel();
         lblPass = new javax.swing.JLabel();
         txtUser = new javax.swing.JTextField();
-        //txtPass = new javax.swing.JTextField();
 		txtPass = new JPasswordField();
         btnCancel = new javax.swing.JButton();
         btnOK = new javax.swing.JButton();
@@ -73,33 +80,30 @@ public class LoginPage extends JPanel implements ActionListener{
 		btnOK.addActionListener(this);
         add(btnOK);
         btnOK.setBounds(280, 250, 110, 30);
-    }// </editor-fold>                        
+    }                      
                                       
 
-
-    // Variables declaration - do not modify                     
+                   
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;
     private javax.swing.JLabel lblPass;
     private javax.swing.JLabel lblUser;
-    //private javax.swing.JTextField txtPass;
 	private JPasswordField txtPass;
     private javax.swing.JTextField txtUser;
-    // End of variables declaration  
 
+	/**
+	 * This method is called whenever a button is pressed on this page
+	 * @param e the ActionEvent of a button being pressed 
+	 */
 	public void actionPerformed(ActionEvent e){
 		
 		Object src=e.getSource();
-		//upload button
+		//If the submit button is pressed 
         if(src.equals(btnOK)){
 			
-			String s1 = txtUser.getText(); //get from textfield1 (username)
-			String s2 = new String(txtPass.getPassword()); //get from textfield2 (password)
-			//System.out.println(s2);
+			String s1 = txtUser.getText();
+			String s2 = new String(txtPass.getPassword()); 
 		
-			// This is where the user auth token will be (Using a static one for now -- linked to a test account)
-			//httpPost.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
-
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		
 			// Here is where we can add in any data to send to the database
@@ -116,9 +120,6 @@ public class LoginPage extends JPanel implements ActionListener{
 
 				CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
 
-				//System.out.println("POST Response Status:: "
-				//	+ httpResponse.getStatusLine().getStatusCode());
-
 				BufferedReader reader = new BufferedReader(new InputStreamReader(
 					httpResponse.getEntity().getContent()));
 
@@ -129,28 +130,28 @@ public class LoginPage extends JPanel implements ActionListener{
 					response.append(inputLine);
 				}
 				reader.close();
-
-				// print result
+				
+				//Determining whether or not the login info was valid
 				if (response.toString().equals("Username or password is incorrect")){
 					JOptionPane.showMessageDialog(null, response.toString());
 				}
 				else
 				{
 					String[] splitData = response.toString().split("\"");
-					//System.out.println(splitData[3]);	// Token
 					String myToken = splitData[3];
+					System.out.println("Got here");
 					mFrame.logInUser("Bearer " + myToken);
-					//mFrame.showMain();
 				}
 				httpClient.close();
 			}catch (Exception err){
+				JOptionPane.showMessageDialog(null, "Error: Cannot connect to database");
 				System.out.println("Error");
-				//err.printStackTrace();
 			}
 			txtUser.setText("");
 			txtPass.setText("");
 			
 		}
+		//If the exit button is pressed 
 		else {
 			System.exit(0);
 		}

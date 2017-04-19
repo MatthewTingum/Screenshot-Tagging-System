@@ -4,6 +4,12 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 import java.util.*;
 
+/**
+ * The HelpPage class sets up a JPanel that has a text area which
+ * displays the text from the readme text file 
+ * @author Richard Lee
+ * @version 2.0
+ */ 
 public class HelpPage extends JPanel implements ActionListener{
 	
 	private MainFrame mFrame;
@@ -11,10 +17,16 @@ public class HelpPage extends JPanel implements ActionListener{
 	private JTextArea txtArea;
 	private JButton btnOk;
 	
+	/**
+	 * This constructor creates and returns an instance of HelpPage 
+	 * @param mf The MainFrame of the GUI
+	 */
 	public HelpPage(MainFrame mf){
 		mFrame = mf;
 		
 		String readMeString = "";
+		
+		//Access the readme text file and store in a String
 		try
 		{
 			Scanner sc = new Scanner(new File("readme.txt"));
@@ -26,6 +38,7 @@ public class HelpPage extends JPanel implements ActionListener{
 			System.out.println(e);
 		}
 		
+		//Initialize components
 		myScrollPane = new javax.swing.JScrollPane();
         txtArea = new javax.swing.JTextArea(readMeString);
         btnOk = new javax.swing.JButton();
@@ -46,7 +59,12 @@ public class HelpPage extends JPanel implements ActionListener{
 		btnOk.addActionListener(this);
 	}
 	
+	/**
+	 * This is the method that is called when the button on this page is pressed
+	 * @param e the ActionEvent from a button press
+	 */
 	public void actionPerformed(ActionEvent e){
+		//Show the main menu if button is pressed 
 		mFrame.showMain();
 	}
 }

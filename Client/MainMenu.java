@@ -16,22 +16,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * The MainMenu class creates the main menu for the GUI 
+ * @author Richard Lee
+ * @version 2.0
+ */ 
+ 
 public class MainMenu extends JPanel implements ActionListener{
 
     //Database variables declared
 	private static final String USER_AGENT = "Mozilla/5.0";
-
-	//private static final String GET_URL = "http://localhost:9090/SpringMVCExample";
-
 	private static final String POST_URL = "http://localhost:3000/submissions/submission";
-	
 	private static final String SUBS_URL = "http://localhost:3000/submissions/submission";
 	
 	//The MainFrame the MainMenu is connected to
     MainFrame mFrame;
 	
-    //@SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    /**
+	 * This constructor creates and returns an instance of MainMenu
+	 * @param mf the MainFrame of the GUI
+	 */
     public MainMenu(MainFrame mf) {
 		
 		mFrame = mf;
@@ -86,10 +90,8 @@ public class MainMenu extends JPanel implements ActionListener{
 		btnConfig.addActionListener(this);
         add(btnConfig);
         btnConfig.setBounds(270, 340, 240, 40);
-    }// </editor-fold>                        
-
-
-    // Variables declaration - do not modify                     
+    }                      
+                   
     private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnHelp;
@@ -97,28 +99,26 @@ public class MainMenu extends JPanel implements ActionListener{
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpload;
     private javax.swing.JLabel lblTitle;
-    // End of variables declaration  
     
-    //This function dictates the actions to occur when a button is pressed in the Main Menu
+    /**
+	 * This method is called whenever a button is pressed on the Main Menu 
+	 * @param e the ActionEvent of a button press
+	 */
     public void actionPerformed(ActionEvent e){
         Object src=e.getSource();
-		//upload button
+		//if the upload button is pressed
         if(src.equals(btnUpload)){
-            // Logic for inerfacing with the API
-			//System.out.println("a thing\n");
-			//mFrame.startSEND();
+			//method that starts an upload attempt
 			mFrame.startSEND();
 		}		
         //Search button
         if(src.equals(btnSearch)){
-			//System.out.println("another thing\n");
-			//mFrame.sendPOST();
+			//Show the search screen
             mFrame.showSearch();
         }
         //Help button
-		//Make message box have scrollpane for long message ///////////////////////////////////////////////
         if(src.equals(btnHelp)){
-            //JOptionPane.showMessageDialog(null, "These are your instructions.  Good Luck!");
+			//Show help page
 			mFrame.showHelp();
         }
         //Exit button
@@ -127,6 +127,7 @@ public class MainMenu extends JPanel implements ActionListener{
         }
         //Login Button
         if(src.equals(btnLog)){
+			//Call method that logs out user
 			mFrame.logOutUser();
         }
         //Config button

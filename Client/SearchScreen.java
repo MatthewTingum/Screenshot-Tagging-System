@@ -35,10 +35,14 @@ import javax.json.Json;
 
 import java.io.StringReader;
 
+/**
+ * The SearchScreen class creates the search screen of the GUI 
+ * @author Richard Lee
+ * @version 2.0
+ */ 
 
 public class SearchScreen extends JPanel implements ActionListener{
 	
-	// The sauce
 	private static final String GET_URL = "http://localhost:3000/api/submissions/submission";
 	private static final String USER_AGENT = "Mozilla/5.0";
 
@@ -47,83 +51,16 @@ public class SearchScreen extends JPanel implements ActionListener{
 	private JList<CellDataEntry> dataList;
 	DefaultListModel<CellDataEntry> listModel;
 
-    //@SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    /**
+     * The constructor creates and returns an instance of SearchScreen 
+	 * @param mf the MainFrame of the GUI 
+	 */
     public SearchScreen(MainFrame mf){
 
 		mFrame = mf;
 		
 		listModel = new DefaultListModel<>();
 		
-		/*
-		for (int i = 0; i<3; i++){
-			c = new CellDataEntry("WowTag", "This describes the picture " + i, "http://www.icxm.net/team/uploads/0-Media/WoWScrnShot_010213_205208.jpg");
-			listModel.addElement(c);
-		}
-		*/
-		
-		/*////// BEGIN SAUCE /////////////////////////////////////////////////////////////
-		
-		try{
-				CloseableHttpClient httpClient = HttpClients.createDefault();
-				HttpGet request = new HttpGet(GET_URL);
-				request.addHeader("User-Agent", USER_AGENT);
-				
-				// This is not the sauce. Make it sauce.
-				request.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
-				
-				HttpResponse response = httpClient.execute(request);
-				
-				System.out.println("\nSending 'GET' request to URL : " + GET_URL);
-				System.out.println("Response Code : " +
-                response.getStatusLine().getStatusCode());
-				
-				BufferedReader reader = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent()));
-
-				String inputLine;
-				StringBuffer responseSB = new StringBuffer();
-
-				while ((inputLine = reader.readLine()) != null) {
-					responseSB.append(inputLine);
-				}
-				reader.close();
-				
-				// print result
-				//System.out.println(responseSB.toString());
-				
-				// This is because I'm lazy
-				String x = responseSB.toString();
-				x = "{ \"data\":" + x.substring(0, x.length()) + "}";
-				
-				System.out.println(x);
-				
-				JsonReader rdr = Json.createReader(new StringReader(x));
-				//JsonReader rdr = Json.createReader(new StringReader("{\"data\" : [{ \"from\" : { \"name\" : \"xxx\"}, \"message\" : \"yyy\"},{ \"from\" : { \"name\" : \"ppp\"}, \"message\" : \"qqq\"}]}"));
-				
-				JsonObject obj = rdr.readObject();
-				JsonArray results = obj.getJsonArray("data");
-				
-				for (JsonObject result : results.getValuesAs(JsonObject.class)) {
-					System.out.println("-----------");
-					System.out.println(result.getString("Description", ""));
-					
-					//c = new CellDataEntry("WowTag", result.getString("Description", ""), "http://www.icxm.net/team/uploads/0-Media/WoWScrnShot_010213_205208.jpg");
-					c = new CellDataEntry("WowTag", result.getString("Description", ""), "C:/Users/kirby/Desktop/CSCI493/github/Screenshot-Tagging-System/Server/app/" + result.getString("ImagePath", ""));
-					System.out.println(result.getString("ImagePath", "") + " LOOOOOOOK @ MEEEEEEEEEEEEE");
-					listModel.addElement(c);
-				}
-					   
-				httpClient.close();
-			}catch (Exception err){
-				System.out.println("Error");
-				//err.printStackTrace();
-			}
-		
-		
-		// THING: result.getString("ImagePath", "")
-		///*/// END SAUCE ////////////////////////////////////////////////////////////////
-	
 		dataList = new JList<>(listModel);
 		
         jScrollPane1 = new javax.swing.JScrollPane(dataList);
@@ -138,16 +75,7 @@ public class SearchScreen extends JPanel implements ActionListener{
 		dataList = new javax.swing.JList<>();
 
         setLayout(null);
-
-		/*
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });*/
-        //jScrollPane1.setViewportView(dataList);
 		
-
         add(jScrollPane1);
         jScrollPane1.setBounds(180, 10, 900, 540);
         add(jTextField1);
@@ -174,55 +102,50 @@ public class SearchScreen extends JPanel implements ActionListener{
         add(jButton2);
         jButton2.setBounds(10, 540, 130, 23);
 		jButton2.addActionListener(this);
-		
-		//test();
-    }// </editor-fold>                                                            
+    }                                                           
 
-
-    // Variables declaration - do not modify                     
+                    
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    //private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
-    // End of variables declaration  
 
+	/**
+	 * This method is called if a button is pressed on the Search screen
+	 * @param e the ActionEvent of a button press
+	 */
 	public void actionPerformed(ActionEvent e){
 		Object src=e.getSource();
-		//upload button
+		//if the search button is pressed 
         if(src.equals(jButton1)) {
 			searchData();
 		}
+		//if the back button is pressed 
 		else 
 			mFrame.showMain();
     }
 	
+	/**
+	 * This method is called when the search button is pressed
+	 */
 	public void searchData(){
 		listModel.removeAllElements();
 		CellDataEntry c;
 		String category = jComboBox1.getSelectedItem().toString();
-		System.out.println("HERE\n\n\n"+ category + "\n\n\n");
 		String keyword = jTextField1.getText();
 		try{
 				CloseableHttpClient httpClient = HttpClients.createDefault();
 				HttpGet request = new HttpGet(GET_URL);
 				request.addHeader("User-Agent", USER_AGENT);
 				
-				// This is not the sauce. Make it sauce.
-				//request.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ODMxZjVjMzNkYjBhODE5MzAwNGVmODAiLCJpYXQiOjE0Nzk2Nzg4OTB9.Zc03s4RXZmydhAUb-rb4AbQwAXbZZ56ICMwG_0SI5iM");
-				
-				//Use new methods //////////////////////////////////////////////////////////
 				request.addHeader("Authorization", mFrame.getToken());
-				//System.out.println("a");
 				
 				HttpResponse response = httpClient.execute(request);
 				
-				System.out.println("\nSending 'GET' request to URL : " + GET_URL);
-				System.out.println("Response Code : " +
-                response.getStatusLine().getStatusCode());
+                response.getStatusLine().getStatusCode();
 				
 				
 				BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -236,24 +159,14 @@ public class SearchScreen extends JPanel implements ActionListener{
 					responseSB.append(inputLine);
 				}
 				reader.close();
-				//System.out.println("c");
 				
-				// print result
-				//System.out.println(responseSB.toString());
-				
-				// This is because I'm lazy
 				String x = responseSB.toString();
 				x = "{ \"data\":" + x.substring(0, x.length()) + "}";
 				
-				//System.out.println(x);
-				//System.out.println("d");
 				
 				JsonReader rdr = Json.createReader(new StringReader(x));
-				//JsonReader rdr = Json.createReader(new StringReader("{\"data\" : [{ \"from\" : { \"name\" : \"xxx\"}, \"message\" : \"yyy\"},{ \"from\" : { \"name\" : \"ppp\"}, \"message\" : \"qqq\"}]}"));
 				
-				//System.out.println("b");
 				JsonObject obj = rdr.readObject();
-				//System.out.println("b");
 				JsonArray results = obj.getJsonArray("data");
 				for (JsonObject result : results.getValuesAs(JsonObject.class)) {
 					
@@ -261,29 +174,38 @@ public class SearchScreen extends JPanel implements ActionListener{
 					System.out.println(result.getString("Description", ""));
 					
 					File imageFileStart = new File("../Server/app");
-					//c = new CellDataEntry("WowTag", result.getString("Description", ""), "http://www.icxm.net/team/uploads/0-Media/WoWScrnShot_010213_205208.jpg");
+					
+					//Creates a CellDataEntry object for an entry
 					c = new CellDataEntry(result.getString("Tags", ""), result.getString("Description", ""), 
 											result.getString("Character", ""), result.getString("Location", ""), 
 											imageFileStart.getAbsolutePath()+ "/" + result.getString("ImagePath", ""));
-					//System.out.println(result.getString("ImagePath", "") + " LOOOOOOOK @ MEEEEEEEEEEEEE");
+											
+					//If all is the selected category 
 					if (category.equals("All")){
+						//If the CellDataEntry object's info math the search criteria, display in the list 
 						if (searchAll(keyword, result.getString("Description", ""), result.getString("Tags", ""), result.getString("Character", ""), result.getString("Location", "")))
 							listModel.addElement(c);
 					}
+					//If a different category is selected 
 					else{
+						//If the CellDataEntry object's info math the search criteria, display in the list 
 						if (matchSearch(keyword, result.getString(category, "")))
 							listModel.addElement(c);
 					}
 				}
 					   
-					   //System.out.println("e");
 				httpClient.close();
 			}catch (Exception err){
 				System.out.println("Error");
-				//err.printStackTrace();
 			}
 	}
 	
+	/**
+	 * This method takes a keyword and the data info and checks for a match 
+	 * @param keyword, the string being searched for 
+	 * @param sample, the data being searched 
+	 * @return boolean, if there is a match or keyword was left empty, return true.  Otherwise, return false 
+	 */
 	public boolean matchSearch(String keyword, String sample){
 		if (keyword.isEmpty())
 			return true;
@@ -294,6 +216,15 @@ public class SearchScreen extends JPanel implements ActionListener{
 		return false;
 	}
 	
+	/**
+	 * This method takes a keyword and the data info and checks for a match 
+	 * @param keyword, the string being searched for 
+	 * @param descript, the description part of the data being searched 
+	 * @param tagg, the tag part of the data being searched 
+	 * @param charact, the character part of the data being searched
+	 * @param locate, the location part of the data being searched 
+	 * @return boolean, if there is a match or keyword was left empty, return true.  Otherwise, return false 
+	 */
 	public boolean searchAll(String keyword, String descript, String tagg, String charact, String locate){
 		if (keyword.isEmpty())
 			return true;
@@ -312,23 +243,4 @@ public class SearchScreen extends JPanel implements ActionListener{
 			return true;
 		return false;
 	}
-
-	/*
-	public void test(){
-        DefaultListModel<DataEntry> defaultListModel = new DefaultListModel();
-        for(int i  = 0; i< 20;i++){
-            Icon icon = null;
-            try {
-                icon = new ImageIcon(new ImageIcon("WowEx.png").getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT));
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-            defaultListModel.addElement(new DataEntry("name "+ i, "addr "+i, icon));
-			//System.out.println(i);
-        }
-        //jList2.setCellRenderer(new mypanel());
-        
-        dataList.setModel(defaultListModel);
-        dataList.setCellRenderer(new dataPanel());
-    }	*/
 }
