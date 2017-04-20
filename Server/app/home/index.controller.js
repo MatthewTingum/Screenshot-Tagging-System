@@ -147,6 +147,7 @@
 		// Hides all search results and shows just the one result clicked on by user
 		function loadSub(id) {
 			
+			
 			vm.curSub = id;
 			vm.showResults = !vm.showResults;
 			vm.showSort = false;
@@ -173,6 +174,8 @@
 			if (vm.loadedSub.UID === vm.user._id){
 				vm.showEditBtn = true;
 			}
+			
+			vm.showEditBtn = true;
 			//vm.showEditBtn = true;
 			//vm.getSubmissions = UserService.GetSubmissions(user);
 			

@@ -82,7 +82,10 @@
 		<br>
 		<b>Location: </b>{{vm.loadedSub.Location}}
 		<br>
-		<b>Chat: </b>{{vm.loadedSub.Chat}}
+		<b>Chat: </b>
+		<div class="list" ng-repeat="thing in vm.loadedSub.ChatSplit">
+				{{ thing }}
+		</div>
 		</center>
 
 
@@ -106,7 +109,10 @@
 			<br>
 			<b>Location: </b>{{vm.loadedSub.Location}}
 			<br>
-			<b>Chat: </b>{{vm.loadedSub.Chat}}
+			<b>Chat: </b>
+			<div class="list" ng-repeat="thing in vm.loadedSub.ChatSplit">
+				{{ thing }}
+			</div>
 			</center>
 
 

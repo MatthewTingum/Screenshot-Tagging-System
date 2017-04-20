@@ -29,7 +29,6 @@
 		
 		// Updates an existing submission
 		function UpdateSub(sub, user) {
-			//console.log("CAN THIS BE LOGGED????\n");
             return $http.put('/api/submissions/updateSub/' + sub._id, sub, user).then(handleSuccess, handleError);
         }
 

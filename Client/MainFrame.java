@@ -57,6 +57,7 @@ public class MainFrame extends JFrame{
     //Variables for purpose of connecting to database declared here
 	private static final String USER_AGENT = "Mozilla/5.0";
 	private static final String POST_URL = "http://localhost:3000/api/submissions/submission";
+	private static final String CURRENT_USER = "http://localhost:3000/api/users/current";
 	public String loginToken = "UA";
 	public boolean loggedIN = false;
 	
@@ -213,6 +214,50 @@ public class MainFrame extends JFrame{
 		File screens = new File(fileString + "\\..\\..\\Screenshots");
 		String[] scNames = screens.list();
 		
+		
+		// Get the current user's UID
+		System.out.println("Attempting to get user's UID...\n");
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet(CURRENT_USER);
+		httpGet.addHeader("User-Agent", USER_AGENT);		
+		httpGet.addHeader("Authorization", loginToken);
+		
+		String UID = "";
+		
+		
+		try{
+
+			CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+
+			System.out.println("GET UID Response Status:: "
+				+ httpResponse.getStatusLine().getStatusCode());
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+				httpResponse.getEntity().getContent()));
+
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = reader.readLine()) != null) {
+				response.append(inputLine);
+			}
+			
+			System.out.println(response);
+			
+			//String userTemp = response;
+			
+			String[] userData = response.toString().split("\"");
+			System.out.println(userData[3]);
+			UID = userData[3];
+			
+			reader.close();
+
+			httpClient.close();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		
 		// Start with line 3 and ignore the last line
 		int i = 3;
 		String temp;
@@ -224,7 +269,7 @@ public class MainFrame extends JFrame{
 		
 			System.out.println("Attempting to send post...\n");
 
-			CloseableHttpClient httpClient = HttpClients.createDefault();
+			httpClient = HttpClients.createDefault();
 			HttpPost httpPost = new HttpPost(POST_URL);
 			httpPost.addHeader("User-Agent", USER_AGENT);
 		
@@ -253,6 +298,7 @@ public class MainFrame extends JFrame{
 
 			
 			urlParameters.add(new BasicNameValuePair("Chat", splitData[9]));
+			urlParameters.add(new BasicNameValuePair("UID", UID));
 
 			//urlParameters.add(new BasicNameValuePair("SubLocation", splitData[7]));	// This is problematic due to the way the addon delimits
 

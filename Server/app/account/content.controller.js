@@ -130,6 +130,7 @@
 		vm.showNext = true;
 		vm.showSort = true;
 		vm.editing = false;
+
 		
 		vm.sorts = ["Newest First", "Oldest First"];
 		vm.params = ["All", "Location", "Description", "Tags", "Character"];
@@ -176,6 +177,7 @@
 			SubmissionService.LoadSub(vm.curSub)
                 .then(function (loadedSub) {
 					vm.loadedSub = loadedSub;
+					vm.loadedSub.ChatSplit = vm.loadedSub.Chat.split("\\n");
                     //FlashService.Success('Submission Loaded');
 					//console.log("It worked fam");
                 })
@@ -184,11 +186,12 @@
 					//console.log(":(");
                 });
 			
-			if (vm.loadedSub.UID === vm.user._id){
-				vm.showEditBtn = true;
-			}
+			//if (vm.loadedSub.UID.trim() === vm.user._id.trim()){
+			//	vm.showEditBtn = true;
+			//}
 			
 			
+			vm.showEditBtn = true;
 			//vm.getSubmissions = UserService.GetSubmissions(user);
 			
 		}
