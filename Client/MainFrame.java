@@ -259,11 +259,11 @@ public class MainFrame extends JFrame{
 		
 		
 		// Start with line 3 and ignore the last line
-		int i = 3;
+		int i = 2;
 		String temp;
 		
 		while (i < list.size() - 7){
-			
+			System.out.println("Got here "+i);
 			temp = list.get(i);
 			String[] splitData = temp.split("\\|");
 		
@@ -284,22 +284,28 @@ public class MainFrame extends JFrame{
 			System.out.println(splitData.length);
 			for (int z = 0; z < splitData.length; z++){
 				
-				System.out.println(splitData[z]);
+				System.out.println(splitData[z] + " " + z);
 				
 			}
 			
 
 			urlParameters.add(new BasicNameValuePair("Description", splitData[1]));
+			System.out.println("Got here this time 1"+i);
 			urlParameters.add(new BasicNameValuePair("Tags", splitData[2]));
-			urlParameters.add(new BasicNameValuePair("Time", splitData[4]));	
-			urlParameters.add(new BasicNameValuePair("ImagePath", "app-content/images/" + scNames[i - 3]));
+			System.out.println("Got here this time 2"+i);
+			urlParameters.add(new BasicNameValuePair("Time", splitData[4]));
+			System.out.println("Got here this time 3"+i);			
+			urlParameters.add(new BasicNameValuePair("ImagePath", "app-content/images/" + scNames[i - 2]));
+			System.out.println("Got here this time 4"+i);
 			urlParameters.add(new BasicNameValuePair("Character", splitData[5]));
+			System.out.println("Got here this time 5"+i);
 			urlParameters.add(new BasicNameValuePair("Location", splitData[7]));
 
-			
+			System.out.println("Got here this time "+i);
 			urlParameters.add(new BasicNameValuePair("Chat", splitData[9]));
 			urlParameters.add(new BasicNameValuePair("UID", UID));
 
+			
 			//urlParameters.add(new BasicNameValuePair("SubLocation", splitData[7]));	// This is problematic due to the way the addon delimits
 
 
