@@ -133,13 +133,13 @@ function loadSettings() --Initial User settings are loaded in function loadSetti
 		end
 	
 	local function firstTimestamp()-- Function firstTimestamp() logs the first line to the output file as a timestamp file. This is needed to seperate game sessions in the log file for future analysis.	
-				ChatFrame1:AddMessage("[SStagger]:Logged session start at "..timestart)
+				--ChatFrame1:AddMessage("[SStagger]:Logged session start at "..timestart)
 				--tinsert(screenshotDB, "/!!/PLAYER "..UnitName("player").." SESSION START AT ".. timestart.."/!!/") --Logs string data into the table screenshotDB with the function tinsert()
 	end
 		
 		
 	 -- Reuses the existing UISettings table if present. If not an empty table is made for the settings. This is stored in the LUA log file
-	firstTimestamp()	      -- Calls function to place first timestamp
+	--firstTimestamp()	      -- Calls function to place first timestamp
 	UISettings = UISettings or {}
 	if next(UISettings) == nil then --In the case where the UISettings table is empty, we are going to place default values into it.
 		UISettings = copyTable(defaults, UISettings)
@@ -177,7 +177,7 @@ function hotkey_press() --Called whenever the hotkey is pressed from within the 
 	local realmName =  GetRealmName()
 	local ZoneText =  GetRealZoneText()
 	local SubZone = GetSubZoneText ()
-	local timevar = format(date()) --Time variable which will be used to create a filename format that is identical to the default naming mechanism that the game uses in the Screenshot() Function
+	
 
 
 	
@@ -185,27 +185,15 @@ function hotkey_press() --Called whenever the hotkey is pressed from within the 
 
 	--We need to mimic the screenshot outputted by the Screenshot() function. We will build
 	--The correct formatting out of the variable 'filename'
-	local filename = timevar:gsub("%/", "") 
-	filename = filename:gsub(":", "")
-	filename = filename:gsub(" ", "_") --Substitutes blank space with underscore
-	filename = "WoWScrnShot_" .. filename .. ".jpg" --It is in correct format at this point
+	
+	if (f) then
+		--ChatFrame1:AddMessage("already exists")
+		f = nil
+		end
+	
+	
 
-
-	--variable userinfo is part of line we will be logging to the output file. 
-	--User info as well as the screenshot's filename are logged correctly. This will make pairing the data with the picture easy to accomplish
-	userinfo = "|" .. filename .."|" .. timevar .. "|" .. playerName .. "|" .. realmName ..  "|" .. ZoneText.. "|" .. SubZone
-
-	getInput(userinfo, filename)--We have the basic data for the log file line. Now we need to handle the inputted data from the addon's descr and tags fields from ingame.
-
-
-end
-
-
-
-
-function getInput(arg, filename)--Finalizes a database entry by assembling the previously obtained user info, and now waits for the user inputted description and tags
-
-	--The following four variables use functions I wrote for their UI properties. The lua/xml interactions are pretty verbose so the UI elements are in their own functions
+		--The following four variables use functions I wrote for their UI properties. The lua/xml interactions are pretty verbose so the UI elements are in their own functions
 	--In a future version it would be more convenient for the UI xml structures to be declared in their own .xml files, rather than being declared through the LUA script. (Like writing HTML ONLY through php, instead of using both .php and .html files)
 	local f=buildFRAME() --Frame that holds in the dynamic elements(buttons/text fields/etc)
 	local button = createButton()
@@ -216,8 +204,22 @@ function getInput(arg, filename)--Finalizes a database entry by assembling the p
 
 	--Clicking the button will execute the code following it. Acts as a way to wait for the input to be entered before executing.  
 	button:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") self:GetParent():Hide()
-     
-	tinsert(screenshotDB,"|"..descr:GetText().."|"..tags:GetText()..arg.."|" .. getChatLog() .. " |")  	--getText is a built in function used to retrieve info from text bo--x. arg is what our userdata + filename string from the previous method
+     local timevar = format(date()) --Time variable which will be used to create a filename format that is identical to the default naming mechanism that the game uses in the Screenshot() Function
+	 local filename = timevar:gsub("%/", "") 
+	filename = filename:gsub(":", "")
+	filename = filename:gsub(" ", "_") --Substitutes blank space with underscore
+	filename = "WoWScrnShot_" .. filename .. ".jpg" --It is in correct format at this point
+
+
+	--variable userinfo is part of line we will be logging to the output file. 
+	--User info as well as the screenshot's filename are logged correctly. This will make pairing the data with the picture easy to accomplish
+	userinfo = "|" .. filename .."|" .. timevar .. "|" .. playerName .. "|" .. realmName ..  "|" .. ZoneText.. "|" .. SubZone
+	
+	 
+	 
+	 
+	 
+	tinsert(screenshotDB,"|"..descr:GetText().."|"..tags:GetText()..userinfo.."|" .. getChatLog() .. " |")  	--getText is a built in function used to retrieve info from text bo--x. arg is what our userdata + filename string from the previous method
 	--tinsert inserted the line into the table, which is now in our log file. It is ready to be interpreted by the User client
 	--Application for our project at this stage. 
 	--It is in the following format: 	|DESCR|TAGS|FILENAME.jpg|MM/DD/YY HH:MM:SS|PLAYERNAME|SERVERNAME|LOCATIONNAME|SUBLOCATIONNAME|
@@ -231,6 +233,20 @@ function getInput(arg, filename)--Finalizes a database entry by assembling the p
 	
 	
 	ChatFrame1:AddMessage("[SStagger]:File "..filename .." saved to drive with logs.") wipeChatLog() end) --Outputs the screenshot name into the game chat box
+	
+	
+	
+	
+	
+
+end
+
+
+
+
+function getInput(arg, filename)--Finalizes a database entry by assembling the previously obtained user info, and now waits for the user inputted description and tags
+
+
 	
 end
 -- ============================================================
@@ -354,7 +370,7 @@ function buildFRAME()
 
 	f.text4 = f.text2 or f:CreateFontString(nil,"ARTWORK","QuestFont")
 	f.text4:SetTextColor(1,1,1,1)
-	f.text4:SetText(format("SStagger v 0.80\n11/22/16\nkaylo mathrax swagchard"))
+	f.text4:SetText(format("SStagger v 0.80\n04/22/17\n"))
 	f.text4:SetPoint("BOTTOMLEFT", 15, 15)
 	f.text4:SetFont("Fonts\\FRIZQT__.TTF", 8)
 	f.text4:SetFontObject("ChatFontNormal")
@@ -365,7 +381,7 @@ function buildFRAME()
 	buttonsettings:SetPoint("BOTTOMRIGHT", f, -25, 12)
 
 	buttonsettings:SetText("Settings")
-	buttonsettings:SetScript("OnClick", function(self) PlaySound("igMainMenuOption")  settingsmenu(f) end)
+	buttonsettings:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") self:GetParent():Hide()  settingsmenu(f) end)
 
 
 	local buttonexit = CreateFrame("button","MyAddonButton", f, "UIPanelButtonTemplate")
@@ -374,7 +390,7 @@ function buildFRAME()
 	buttonexit:SetPoint("TOPRIGHT", f, -2, -2)
 
 	buttonexit:SetText(" X")
-	buttonexit:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") self:GetParent():Hide() ChatFrame1:AddMessage('[SStagger]:Screenshot Taken But No Links Created')  end)
+	buttonexit:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") self:GetParent():Hide()   end)
 
 
 	return f
@@ -461,7 +477,11 @@ end
 function settingsmenu(parentpointer)
 	parentpointer:Hide()
 
+
+	
+		
 	if not stng then
+	--ChatFrame1:AddMessage("SETTING MENU DOESNT exists")
 	stng=CreateFrame("Frame",parentpointer,QuestLogDetailScrollChildFrame)
 
 	stng:SetBackdrop({
@@ -492,7 +512,7 @@ function settingsmenu(parentpointer)
 	stng:SetScript("OnDragStart", function(self) self:StartMoving() end)
 	stng:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
 
-	stng:Show()
+	--stng:Show()
 
 
 
@@ -509,7 +529,7 @@ function settingsmenu(parentpointer)
 	 
 	  local function OnClick(self5)
 	   UIDropDownMenu_SetSelectedID(dropdown1, self5:GetID())
-	   ChatFrame1:AddMessage("dropdown 1 value: ".. self5:GetID())
+	   --ChatFrame1:AddMessage("dropdown 1 value: ".. self5:GetID())
 	 end
 
 	  local function initialize(self5, level)
@@ -590,9 +610,11 @@ function settingsmenu(parentpointer)
 	 UIDropDownMenu_JustifyText(dropdown2, "LEFT")
 	 UIDROPDOWNMENU_SHOW_TIME = .1
 	dropdown2:SetPoint("BOTTOMLEFT", 130, 55) 
+	
+	
 	end
 	--after first time this happens
-	 stng:Show()
+	stng:Show()
 
 
 
@@ -625,8 +647,11 @@ function settingsmenu(parentpointer)
 
 	parentpointer:SetWidth(UISettings["X_res"])
 	parentpointer:SetHeight(UISettings["Y_res"])
-
+	stng:SetWidth(UISettings["X_res"])
+	stng:SetHeight(UISettings["Y_res"])
+	
 	stng:Hide()
+	
 	end)
 
 
@@ -640,7 +665,9 @@ function settingsmenu(parentpointer)
 	buttonexit:SetText(" X")
 	buttonexit:SetScript("OnClick", function(self) PlaySound("igMainMenuOption") 
 	parentpointer:Show() 
-	stng:Hide()end)
+	stng:Hide()
+	
+	end)
 
 
 
