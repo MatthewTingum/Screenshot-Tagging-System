@@ -76,7 +76,7 @@ public class MainFrame extends JFrame{
 	 * This constructor creates and returns an instance of the MainFrame object
 	 */
     public MainFrame() {
-        super("SUPER AWESOME WOW APP");
+        super("SSTagger Client");
         setResizable(false);
         setSize(820, 430);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

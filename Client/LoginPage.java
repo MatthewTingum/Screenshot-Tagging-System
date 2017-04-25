@@ -139,7 +139,7 @@ public class LoginPage extends JPanel implements ActionListener{
 				{
 					String[] splitData = response.toString().split("\"");
 					String myToken = splitData[3];
-					System.out.println("Got here");
+					//System.out.println("Got here");
 					mFrame.logInUser("Bearer " + myToken);
 				}
 				httpClient.close();
