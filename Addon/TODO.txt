@@ -9,4 +9,4 @@ Ability to change when the screenshot is taken (after clicking hotkey versus aft
 Ability to change resolution of addon from within game
 Ability for certain screenshots to be tagged for deletion in the case of no tags/descr being made
 
-Find more time
+Find more time1
